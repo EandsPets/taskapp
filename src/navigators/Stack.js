@@ -56,10 +56,10 @@ function CustomTabBar(props) {
   return (
     <View style={styles.menuWrapper}>
       <View style={styles.menuContainer}>
-        <TouchableOpacity onPress={() => handleNavigation('Dashboard')}>
+        <TouchableOpacity onPress={() => handleNavigation('My Tasks')}>
           <Ionicons name="ios-menu" size={32} color={getColor('Dashboard')} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleNavigation('Projects')}>
+        <TouchableOpacity onPress={() => handleNavigation('Tasks')}>
           <Ionicons
             name="ios-document-text"
             size={25}
@@ -89,8 +89,8 @@ function CustomTabBar(props) {
 const BottomStack = () => {
   return (
     <BottomTab.Navigator tabBar={props => <CustomTabBar {...props} />}>
-      <BottomTab.Screen name="Dashboard" component={Dashboard} options={{}} />
-      <BottomTab.Screen name="Projects" component={Projects} />
+      <BottomTab.Screen name="My Tasks" component={Dashboard} options={{}} />
+      <BottomTab.Screen name="Tasks" component={Projects} />
       <BottomTab.Screen name="Members" component={Members} />
       <BottomTab.Screen name="Profile" component={Profile} />
     </BottomTab.Navigator>

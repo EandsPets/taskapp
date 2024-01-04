@@ -26,24 +26,12 @@ export function TaskInfo({task}) {
   return (
     <TouchableWithoutFeedback onPress={() => handleBottomModal()}>
       <View style={styles.container}>
-        <AntDesign
-          name="checksquareo"
-          size={20}
-          color={
-            task?.progress === 100 ? appTheme.COLOR2 : appTheme.INACTIVE_COLOR
-          }
-          style={styles.taskProgressIndicator}
-        />
-        <View style={styles.taskMiddleColumn}>
-          <Text style={styles.taskTitle} numberOfLines={1} ellipsizeMode="tail">
-            {task?.title}
-          </Text>
-          <ProgressBar
-            progress={Number(task?.progress)}
-            color={task?.progress === 100 ? appTheme.COLOR2 : appTheme.COLOR1}
-            style={styles.taskProgressBar}
-          />
-        </View>
+        <Text style={styles.taskTitle} numberOfLines={1} ellipsizeMode="tail">
+          {task?.title}
+        </Text>
+        <Text style={styles.taskTitle} numberOfLines={1} ellipsizeMode="tail">
+          {task?.title}
+        </Text>
         <View style={styles.teamWrapper}>
           {task?.members?.slice(0, 2)?.map(member => (
             <Image
