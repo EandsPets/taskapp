@@ -71,7 +71,10 @@ export function TaskListComponent({title, tasks, paddingTop}) {
           key={index}
           style={[
             styles.cellWidth,
-            {color: 'white', backgroundColor: colorForStatus},
+            {
+              backgroundColor: colorForStatus,
+              fontFamily: 'Poppins-Bold',
+            },
             styleForTitle,
           ]}>
           {value[1]}
@@ -82,7 +85,9 @@ export function TaskListComponent({title, tasks, paddingTop}) {
 
   return (
     <View style={[styles.container, {paddingTop: paddingTop}]}>
-      <Text variant="titleLarge" style={{color: 'green'}}>
+      <Text
+        variant="titleLarge"
+        style={{color: 'green', fontFamily: 'Poppins-Italic'}}>
         {title} Tasks - 40%
       </Text>
       <ScrollView horizontal={true}>

@@ -12,10 +12,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerLeftText: {
+    fontFamily: 'Poppins-Medium',
     color: '#000',
     marginRight: 5,
     fontWeight: 'bold',
-    fontSize: 15,
+    fontSize: 20,
   },
   statisticsSection: {
     paddingTop: 20,
@@ -32,6 +33,7 @@ const styles = StyleSheet.create({
   },
   contentTitle: {
     fontSize: 22,
+    fontFamily: 'Poppins-Medium',
     fontWeight: 'bold',
     marginBottom: 30,
   },
@@ -59,11 +61,13 @@ const styles = StyleSheet.create({
   },
   statisticsValue: {
     color: '#fff',
+    fontFamily: 'Poppins-Medium',
     fontSize: 20,
     fontWeight: 'bold',
   },
   statisticsTitle: {
     color: '#fff',
+    fontFamily: 'Poppins-Medium',
     fontSize: 15,
     fontWeight: 'bold',
   },
@@ -87,6 +91,7 @@ const styles = StyleSheet.create({
   tasksLeftText: {
     marginRight: 7,
     fontWeight: 'bold',
+    fontFamily: 'Poppins-Medium',
     fontSize: 15,
   },
   plusBtnContainer: {
@@ -101,6 +106,7 @@ const styles = StyleSheet.create({
   },
   tasksRightText: {
     marginRight: 7,
+    fontFamily: 'Poppins-Medium',
     fontWeight: 'bold',
     fontSize: 15,
     color: appTheme.INACTIVE_COLOR,

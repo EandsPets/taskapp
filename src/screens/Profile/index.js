@@ -79,22 +79,6 @@ export function Profile({navigation}) {
                 <Text style={styles.exploreText}>Members</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.singleExplore}>
-                <MaterialCommunityIcons
-                  name="crown"
-                  size={22}
-                  color={appTheme.COLOR1}
-                />
-                <Text style={styles.exploreText}>Go Pro</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.singleExplore}>
-                <Fontisto
-                  name="pie-chart-1"
-                  size={22}
-                  color={appTheme.COLOR1}
-                />
-                <Text style={styles.exploreText}>Report</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.singleExplore}>
                 <SimpleLineIcons
                   name="settings"
                   size={22}
@@ -103,10 +87,7 @@ export function Profile({navigation}) {
                 <Text style={styles.exploreText}>Settings</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={[
-                  styles.singleExplore,
-                  {marginRight: 'auto', marginLeft: '7%'},
-                ]}
+                style={styles.singleExplore}
                 onPress={() => handleNavigation('Onboarding')}>
                 <MaterialCommunityIcons
                   name="logout"

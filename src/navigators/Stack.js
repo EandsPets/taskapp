@@ -6,6 +6,8 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {
   Dashboard,
   Calendar,
@@ -57,14 +59,10 @@ function CustomTabBar(props) {
     <View style={styles.menuWrapper}>
       <View style={styles.menuContainer}>
         <TouchableOpacity onPress={() => handleNavigation('My Tasks')}>
-          <Ionicons name="ios-menu" size={32} color={getColor('Dashboard')} />
+          <FontAwesome name="tasks" size={25} color={getColor('My Tasks')} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleNavigation('Tasks')}>
-          <Ionicons
-            name="ios-document-text"
-            size={25}
-            color={getColor('Projects')}
-          />
+          <FontAwesome name="list-alt" size={25} color={getColor('Tasks')} />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.plusBtnContainer}
@@ -72,12 +70,16 @@ function CustomTabBar(props) {
           <MaterialCommunityIcons name="plus" size={25} color="#fff" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleNavigation('Members')}>
-          <Feather name="send" size={25} color={getColor('Members')} />
+          <FontAwesome6
+            name="people-group"
+            size={25}
+            color={getColor('Members')}
+          />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleNavigation('Profile')}>
           <MaterialIcons
             name="account-circle"
-            size={25}
+            size={32}
             color={getColor('Profile')}
           />
         </TouchableOpacity>

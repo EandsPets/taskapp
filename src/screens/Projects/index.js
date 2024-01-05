@@ -7,6 +7,7 @@ import {
   FlatList,
 } from 'react-native';
 import shortid from 'shortid';
+import {SelectList} from 'react-native-dropdown-select-list';
 import styles from './projectsStyle';
 import {AuthContext} from '../../context';
 import {
@@ -14,18 +15,28 @@ import {
   ProjectCard,
   EmptyListComponent,
 } from '../../components';
-import {combineData} from '../../utils/DataHelper';
+import {TaskListComponent} from '../../components/Dashboard/TaskList';
 
 export function Projects({navigation}) {
-  const tabs = ['All', 'Ongoing', 'Completed'];
+  const tabs = ['All', 'In-Progress', 'Completed'];
 
   const {state, dispatch} = useContext(AuthContext);
-  const {projects} = state;
+  const {tasks, members} = state;
 
-  const [data, setData] = useState({activeTab: 'All'});
+  const [data, setData] = useState({
+    activeTab: 'All',
+    tasks: tasks,
+    selectedMember: 0,
+  });
 
   const toggleTab = tab => {
-    setData(combineData(data, {activeTab: tab}));
+    let tasksToRender = [];
+    if (tab === 'All') {
+      tasksToRender = tasks;
+    } else {
+      tasksToRender = tasks?.filter(task => task.status === tab) || [];
+    }
+    setData({activeTab: tab, tasks: tasksToRender});
   };
 
   const isActiveTab = tab => {
@@ -33,37 +44,26 @@ export function Projects({navigation}) {
     return value;
   };
 
-  const getProjects = () => {
-    let {activeTab} = data;
-    let projectsToRender = [];
-    if (activeTab === 'All') {
-      projectsToRender = projects;
+  const filterTasks = (val, type) => {
+    let tasksToRender = [];
+    if (type === 'user') {
+      tasksToRender = tasks?.filter(task => task.assigned_to.id === val);
     } else {
-      projectsToRender =
-        projects?.filter(
-          project => project.status === activeTab?.toLowerCase(),
-        ) || [];
+      tasksToRender = tasks?.filter(tasks => tasks.includes(val));
     }
-
-    return projectsToRender;
-  };
-
-  const renderProjectInfo = ({item}) => {
-    return (
-      <ProjectCard
-        project={item}
-        key={shortid.generate()}
-        navigation={navigation}
-      />
-    );
+    setData({...data, tasks: tasksToRender});
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <TabScreenHeader
-        leftComponent={() => <Text style={styles.headerTitle}>Projects</Text>}
+        leftComponent={() => (
+          <SelectList
+            setSelected={val => filterTasks(val, 'user')}
+            data={members.map(member => ({key: member.id, value: member.name}))}
+          />
+        )}
         isSearchBtnVisible={true}
-        isMoreBtnVisible={true}
       />
       <View style={styles.projectsBody}>
         <View style={styles.projectsTabs}>
@@ -87,14 +87,8 @@ export function Projects({navigation}) {
             </TouchableOpacity>
           ))}
         </View>
-        {projects?.length > 0 ? (
-          <FlatList
-            data={getProjects()}
-            keyExtractor={(item, index) => shortid.generate()}
-            renderItem={renderProjectInfo}
-            horizontal={false}
-            showsVerticalScrollIndicator={false}
-          />
+        {tasks?.length > 0 ? (
+          <TaskListComponent title={data.activeTab} tasks={data.tasks} />
         ) : (
           <EmptyListComponent />
         )}

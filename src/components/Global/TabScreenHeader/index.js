@@ -14,61 +14,22 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import {combineData} from '../../../utils/DataHelper';
 import appTheme from '../../../constants/colors';
 
-export function TabScreenHeader({
-  leftComponent,
-  isSearchBtnVisible,
-  isMoreBtnVisible,
-}) {
+export function TabScreenHeader({leftComponent}) {
   const [data, setData] = useState({isSearchFieldVisible: false});
-
-  const toggleSearchField = () => {
-    let {isSearchFieldVisible} = data;
-    isSearchFieldVisible = !isSearchFieldVisible;
-    setData(combineData(data, {isSearchFieldVisible}));
-  };
 
   return (
     <View style={styles.headerContainer}>
       {leftComponent()}
       <View style={styles.headerRightContainer}>
-        {isSearchBtnVisible ? (
-          <View style={styles.searchContainer}>
-            {data?.isSearchFieldVisible ? (
-              <View style={styles.searchInputWrapper}>
-                <TextInput
-                  placeholder="Search"
-                  style={styles.searchInputField}
-                  placeholderTextColor={appTheme.INACTIVE_COLOR}
-                />
-                <TouchableOpacity onPress={() => toggleSearchField()}>
-                  <MaterialIcons name="close" size={20} color={appTheme.INACTIVE_COLOR} />
-                </TouchableOpacity>
-              </View>
-            ) : (
-              <TouchableOpacity onPress={() => toggleSearchField()}>
-                <Feather name="search" size={22} color="#000" />
-              </TouchableOpacity>
-            )}
-          </View>
-        ) : null}
-        {isMoreBtnVisible ? (
-          <Menu>
-            <MenuTrigger>
-              <Feather name="more-vertical" size={22} color="#000" />
-            </MenuTrigger>
-            <MenuOptions>
-              <MenuOption>
-                <Text style={styles.menuOptionText}>Settings</Text>
-              </MenuOption>
-              <MenuOption>
-                <Text style={styles.menuOptionText}>Log out</Text>
-              </MenuOption>
-            </MenuOptions>
-          </Menu>
-        ) : null}
+        <View style={styles.searchInputWrapper}>
+          <TextInput
+            placeholder="Search"
+            style={styles.searchInputField}
+            placeholderTextColor={appTheme.INACTIVE_COLOR}
+          />
+        </View>
       </View>
     </View>
   );
@@ -111,11 +72,10 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     width: 170,
     paddingHorizontal: 7,
-    height: 35,
+    height: 50,
   },
   searchInputField: {
     fontSize: 15,
-    height: 40,
-
+    height: 50,
   },
 });
