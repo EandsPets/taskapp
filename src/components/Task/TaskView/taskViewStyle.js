@@ -4,7 +4,6 @@ import appTheme from '../../../constants/colors';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: '#fafafa',
     paddingHorizontal: 16,
     paddingVertical: 10,
   },
@@ -39,6 +38,7 @@ const styles = StyleSheet.create({
   },
   plusBtnContainer: {
     alignSelf: 'center',
+    paddingBottom: 100,
   },
   scheduleWrapper: {
     display: 'flex',

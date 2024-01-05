@@ -34,7 +34,7 @@ export function TaskListComponent({title, tasks, paddingTop}) {
   ];
 
   const color = {
-    Pending: '#daf542',
+    'In-Progress': '#daf542',
     'To-do': '#f54242',
     Completed: '#42f58d',
     Low: '#42b0f5',

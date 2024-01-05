@@ -1,15 +1,10 @@
 import React, {useContext, useState} from 'react';
-import {
-  View,
-  Text,
-  SafeAreaView,
-  ScrollView,
-} from 'react-native';
+import {View, Text, SafeAreaView, ScrollView} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from './dashboardStyle';
 import {AuthContext} from '../../context';
 import {TabScreenHeader, EmptyListComponent} from '../../components';
-import { TaskListComponent } from '../../components/Dashboard/TaskList';
+import {TaskListComponent} from '../../components/Dashboard/TaskList';
 import {formatCurrentDate} from '../../utils/DataHelper';
 
 export function Dashboard() {
@@ -35,9 +30,20 @@ export function Dashboard() {
       <View style={styles.contentBody}>
         <View style={styles.tasksSection}>
           <ScrollView style={styles.tasksBody}>
-            <TaskListComponent title="On going" tasks={tasks} />
-            <TaskListComponent title="To-do" tasks={tasks} paddingTop={30} />
-            <TaskListComponent title="Completed" tasks={tasks} paddingTop={30} />
+            <TaskListComponent
+              title="On going"
+              tasks={tasks.filter(task => task.status === 'In-Progress')}
+            />
+            <TaskListComponent
+              title="To-do"
+              tasks={tasks.filter(task => task.status === 'To-do')}
+              paddingTop={30}
+            />
+            <TaskListComponent
+              title="Completed"
+              tasks={tasks.filter(task => task.status === 'Completed')}
+              paddingTop={30}
+            />
           </ScrollView>
         </View>
       </View>

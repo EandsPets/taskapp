@@ -3,7 +3,7 @@ const tasksState = {
     {
       id: 1,
       title: 'Do your laundry',
-      status: 'Pending',
+      status: 'In-Progress',
       due: 'Dec 15',
       priority: 'High',
       assigned_by: 'Mom',
@@ -31,7 +31,7 @@ const tasksState = {
     {
       id: 2,
       title: 'Do your homework',
-      status: 'Pending',
+      status: 'In-Progress',
       due: 'Dec 15',
       priority: 'Medium',
       assigned_by: 'Mom',
