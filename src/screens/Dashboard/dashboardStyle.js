@@ -1,118 +1,108 @@
 import {StyleSheet} from 'react-native';
-import appTheme from '../../constants/colors';
+import colors from '../../constants/colors';
+import sizes from '../../constants/fontSize';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fafafa',
+    backgroundColor: '#fff',
   },
   flexRow: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
+    paddingHorizontal: 16,
   },
   headerLeftText: {
-    fontFamily: 'Poppins-Medium',
-    color: '#000',
+    fontFamily: 'Poppins-Regular',
     marginRight: 5,
-    fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: sizes.subHeaderFontSize,
   },
-  statisticsSection: {
-    paddingTop: 20,
-    backgroundColor: '#fff',
-    paddingHorizontal: 16,
-    borderBottomStartRadius: 30,
-    borderBottomEndRadius: 30,
-    paddingBottom: 30,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.5,
-    shadowRadius: 1,
-    elevation: 1,
-  },
-  contentTitle: {
-    fontSize: 22,
-    fontFamily: 'Poppins-Medium',
-    fontWeight: 'bold',
-    marginBottom: 30,
-  },
-  statisticsContainer: {
-    display: 'flex',
+  cardContainer: {
+    flex: 1,
+    marginTop: 10,
     flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
     justifyContent: 'space-between',
+    paddingHorizontal: 16,
   },
-  statisticsContent: {
-    width: '45%',
-    borderRadius: 15,
-    height: 100,
-    padding: 15,
-    marginBottom: 15,
+  circleText: {
+    fontSize: sizes.headerFontSize,
+    fontFamily: 'Poppins-Regular',
+    color: 'black',
   },
-  statisticsIcon: {
-    marginLeft: 'auto',
-  },
-  statisticsCounter: {
+  progressText: {
     alignSelf: 'center',
-    display: 'flex',
-    alignItems: 'center',
-  },
-  statisticsValue: {
-    color: '#fff',
-    fontFamily: 'Poppins-Medium',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  statisticsTitle: {
-    color: '#fff',
-    fontFamily: 'Poppins-Medium',
-    fontSize: 15,
+    fontFamily: 'Poppins-Regular',
+    fontSize: sizes.listHeaderFontSize,
+    color: '#000',
     fontWeight: 'bold',
   },
   tasksSection: {
-    paddingHorizontal: 16,
     paddingTop: 30,
-    paddingBottom: 120,
+    marginBottom: 60,
   },
-  tasksHeader: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  singleExplore: {
+    height: 160,
+    width: '31%',
+    shadowColor: '#333',
+    elevation: 10,
+    backgroundColor: '#fff',
     marginBottom: 20,
-  },
-  tasksRow: {
+    borderRadius: 20,
     display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  tasksLeftText: {
-    marginRight: 7,
-    fontWeight: 'bold',
-    fontFamily: 'Poppins-Medium',
-    fontSize: 15,
-  },
-  plusBtnContainer: {
-    backgroundColor: appTheme.COLOR1,
-    height: 25,
-    width: 25,
-    borderRadius: 50,
-    display: 'flex',
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    alignSelf: 'flex-start',
   },
-  tasksRightText: {
-    marginRight: 7,
-    fontFamily: 'Poppins-Medium',
+  progressContainer: {
+    flex: 1,
+    alignItems: 'flex-end',
+  },
+  progressBar: {
+    width: 100,
+    height: 4,
+    backgroundColor: '#d9d9d9',
+    borderRadius: 5,
+    marginTop: 5,
+  },
+  circle: {
+    height: 50,
+    width: 50,
+    shadowColor: '#333',
+    elevation: 10,
+    backgroundColor: '#fff',
+    borderRadius: 25,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
+  exploreText: {
     fontWeight: 'bold',
-    fontSize: 15,
-    color: appTheme.INACTIVE_COLOR,
+    fontSize: sizes.cardTitleFontSize,
   },
-  tasksList: {
-    marginBottom: 50,
+  subExploreText: {
+    fontSize: sizes.normalFontSize,
+  },
+  listContainer: {
+    backgroundColor: colors.LIST_BG_COLOR,
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+  },
+  addTaskText: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: sizes.normalFontSize,
+  },
+  createNewTask: {
+    width: '100%',
+    height: 50,
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingLeft: 20,
+    backgroundColor: '#fff',
+    marginTop: 10,
+    borderRadius: 5,
   },
 });
 

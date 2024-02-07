@@ -1,11 +1,11 @@
 import {StyleSheet} from 'react-native';
 import appTheme from '../../constants/colors';
+import sizes from '../../constants/fontSize';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingBottom: 40,
   },
   backButton: {
     display: 'flex',
@@ -24,9 +24,17 @@ const styles = StyleSheet.create({
     paddingTop: 40,
   },
   largeText: {
-    fontWeight: 'bold',
-    fontSize: 20,
+    fontFamily: 'Poppins-Regular',
+    fontSize: sizes.subHeaderFontSize,
+    color: 'black',
     lineHeight: 32,
+    marginBottom: 40,
+  },
+  middleText: {
+    fontSize: 16,
+    fontFamily: 'Poppins-Regular',
+    color: 'black',
+    fontWeight: 'bold',
     marginBottom: 10,
   },
   smallText: {
@@ -44,7 +52,12 @@ const styles = StyleSheet.create({
     marginBottom: 35,
     height: 40,
   },
-  textInput: {fontSize: 17, flex: 1, color: '#000', height: 45},
+  textInput: {
+    flex: 1,
+    fontSize: 16,
+    color: '#000',
+    height: 45,
+  },
   savePwdRow: {
     marginTop: 20,
     display: 'flex',
@@ -53,8 +66,22 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 40,
   },
-  savePwdText: {color: appTheme.COLOR2, fontWeight: 'bold'},
+  savePwdText: {
+    right: 0,
+    fontFamily: 'Poppins-Italic',
+  },
   loginBtnWrapper: {
+    backgroundColor: '#6161ff',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 45,
+    borderRadius: 7,
+    marginTop: 25,
+  },
+  loginBtnText: {fontWeight: 'bold', fontSize: 16, color: '#fff'},
+  signUpBtnWrapper: {
     borderColor: appTheme.INACTIVE_COLOR,
     borderWidth: 1,
     display: 'flex',
@@ -64,18 +91,7 @@ const styles = StyleSheet.create({
     height: 45,
     borderRadius: 7,
   },
-  loginBtnText: {fontWeight: 'bold', fontSize: 16, color: '#000000aa'},
-  signUpBtnWrapper: {
-    backgroundColor: appTheme.PRIMARY_COLOR,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 45,
-    borderRadius: 7,
-    marginBottom: 15,
-  },
-  signUpBtnText: {fontWeight: 'bold', fontSize: 16, color: '#fff'},
+  signUpBtnText: {fontWeight: 'bold', fontSize: 16, color: '#000000aa'},
 });
 
 export default styles;

@@ -2,11 +2,12 @@ import React, {useContext, useState} from 'react';
 import {
   View,
   Text,
+  TextInput,
   SafeAreaView,
-  TouchableOpacity,
   ScrollView,
   Image,
 } from 'react-native';
+import {Button, Checkbox} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import shortid from 'shortid';
 import styles from './membersStyle';
@@ -15,6 +16,7 @@ import {TabScreenHeader, EmptyListComponent} from '../../components';
 import {AuthContext} from '../../context';
 import {navigateToNestedRoute} from '../../navigators/RootNavigation';
 import {getScreenParent} from '../../utils/NavigationHelper';
+import {UserListComponent} from '../../components/User';
 
 export function Members() {
   const {state, dispatch} = useContext(AuthContext);
@@ -27,47 +29,93 @@ export function Members() {
   return (
     <SafeAreaView style={styles.container}>
       <TabScreenHeader
-        leftComponent={() => <Text style={styles.headerTitle}>Members</Text>}
-        isSearchBtnVisible={false}
-        isMoreBtnVisible={true}
+        title="Users"
+        isSearchBtnVisible={true}
+        isMoreBtnVisible={false}
       />
-      {members?.length ? (
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.membersWrapper}>
-            {members.map(member => (
-              <TouchableOpacity
-                style={styles.singleMember}
-                onPress={() => handleNavigation('Chat', member)}
-                key={shortid.generate()}>
-                <Image
-                  style={styles.singleMemberPhoto}
-                  source={{
-                    uri: member?.photo,
-                  }}
-                />
-                <View style={styles.singleMemberInfo}>
-                  <Text
-                    style={styles.selectedMemberName}
-                    numberOfLines={1}
-                    ellipsizeMode="tail">
-                    {member?.name}
-                  </Text>
-                  <Text style={styles.selectedMemberLastSeen}>
-                    {member?.designation}
-                  </Text>
-                </View>
-                <MaterialCommunityIcons
-                  name="message"
-                  size={17}
-                  color={appTheme.PRIMARY_COLOR}
-                />
-              </TouchableOpacity>
-            ))}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.membersWrapper}>
+          <Text style={{fontSize: 18}}>Please enter phone number</Text>
+          <View style={{flex: 1, flexDirection: 'row', marginTop: 10}}>
+            <View
+              style={{
+                borderWidth: 1,
+                borderRadius: 10,
+                width: '60%',
+                borderColor: '#e6e6e6',
+                paddingLeft: 10,
+              }}>
+              <TextInput
+                placeholder="Search"
+                placeholderTextColor={appTheme.INACTIVE_COLOR}
+                inputMode="numeric"
+                maxLength={10}
+              />
+            </View>
+            <Button
+              mode="contained"
+              onPress={() => console.log('Pressed')}
+              style={{width: '39%', marginLeft: 5, justifyContent: 'center'}}
+              buttonColor={appTheme.PRIMARY_COLOR}>
+              Find
+            </Button>
           </View>
-        </ScrollView>
-      ) : (
-        <EmptyListComponent />
-      )}
+          <View
+            style={{
+              marginVertical: 25,
+              width: '100%',
+              height: 1,
+              backgroundColor: appTheme.BORDER_COLOR,
+            }}
+          />
+          <View style={{marginTop: 10}}>
+            <Text style={{fontSize: 18}}>Name</Text>
+            <View
+              style={{
+                borderWidth: 1,
+                borderRadius: 10,
+                borderColor: '#e6e6e6',
+                paddingLeft: 10,
+              }}>
+              <TextInput
+                placeholder="Name"
+                placeholderTextColor={appTheme.INACTIVE_COLOR}
+                editable={false}
+              />
+            </View>
+          </View>
+          <View style={{marginTop: 10}}>
+            <Text style={{fontSize: 18}}>Email</Text>
+            <View
+              style={{
+                borderWidth: 1,
+                borderRadius: 10,
+                borderColor: '#e6e6e6',
+                paddingLeft: 10,
+              }}>
+              <TextInput
+                placeholder="Email"
+                placeholderTextColor={appTheme.INACTIVE_COLOR}
+                editable={false}
+              />
+            </View>
+          </View>
+          <Button
+            mode="contained"
+            onPress={() => console.log('Pressed')}
+            style={{
+              height: 50,
+              marginLeft: 5,
+              justifyContent: 'center',
+              marginTop: 25,
+            }}
+            buttonColor={appTheme.PRIMARY_COLOR}>
+            Send Invite
+          </Button>
+          <View style={{marginTop: 50}} />
+          <UserListComponent />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

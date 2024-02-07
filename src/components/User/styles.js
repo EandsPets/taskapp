@@ -1,20 +1,14 @@
 import {StyleSheet} from 'react-native';
-import colors from '../../../constants/colors';
-import sizes from '../../../constants/fontSize';
+import colors from '../../constants/colors';
 
 const styles = StyleSheet.create({
-  tasksList: {
+  userList: {
     marginBottom: 50,
     height: 300,
   },
   cellWidth: {
     width: 100,
     justifyContent: 'center',
-    fontSize: sizes.normalFontSize,
-  },
-  cellText: {
-    fontFamily: 'Poppins-Regular',
-    fontSize: sizes.normalFontSize,
   },
   memberPhoto: {
     height: 40,
@@ -36,10 +30,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     backgroundColor: '#fff',
-  },
-  listTitle: {
-    fontFamily: 'Poppins-Bold',
-    fontSize: sizes.listHeaderFontSize,
   },
 });
 

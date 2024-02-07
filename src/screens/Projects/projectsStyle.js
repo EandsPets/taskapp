@@ -1,43 +1,93 @@
 import {StyleSheet} from 'react-native';
-import appTheme from '../../constants/colors';
+import colors from '../../constants/colors';
+import sizes from '../../constants/fontSize';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fafafa',
-  },  
-  headerTitle: {
-    fontWeight: 'bold',
-    fontSize: 19,
-  },
-  projectsBody: {
-    paddingTop: 20,
-    paddingHorizontal: 16,
-    paddingBottom: 120
-  },
-  projectsTabs: {
     backgroundColor: '#fff',
+  },
+  flexRow: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
+    paddingHorizontal: 16,
+  },
+  headerLeftText: {
+    fontFamily: 'Poppins-Regular',
+    marginRight: 5,
+    fontSize: sizes.subHeaderFontSize,
+  },
+  cardContainer: {
+    flex: 1,
+    marginTop: 10,
+    flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 3,
-    borderRadius: 7,
+    paddingHorizontal: 16,
+  },
+  circleText: {
+    fontSize: sizes.headerFontSize,
+    fontFamily: 'Poppins-Regular',
+    color: 'black',
+  },
+  contentTitle: {
+    fontSize: 22,
+    fontFamily: 'Poppins-Medium',
+    fontWeight: 'bold',
     marginBottom: 30,
   },
-  projectTab: {
-    width: '30%',
-    borderRadius: 7,
+  tasksSection: {
+    paddingTop: 30,
+    marginBottom: 60,
   },
-  activeProjectTab: {
-    backgroundColor: appTheme.PRIMARY_COLOR,
+  singleExplore: {
+    height: 160,
+    width: '31%',
+    shadowColor: '#333',
+    elevation: 10,
+    backgroundColor: '#fff',
+    marginBottom: 20,
+    borderRadius: 20,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'flex-start',
   },
-  projectTabText: {fontSize: 16, paddingVertical: 7, textAlign: 'center'},
-  activeProjectTabText: {
-    color: '#fff',
+  progressContainer: {
+    flex: 1,
+    alignItems: 'flex-end',
+    marginBottom: 20,
   },
-  inActiveProjectTabText: {
-    color: appTheme.PRIMARY_COLOR,
+  progressBar: {
+    width: 100,
+    height: 4,
+    backgroundColor: '#d9d9d9',
+    borderRadius: 5,
+    marginTop: 5,
+  },
+  circle: {
+    height: 50,
+    width: 50,
+    shadowColor: '#333',
+    elevation: 10,
+    backgroundColor: '#fff',
+    marginBottom: 10,
+    borderRadius: 25,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
+  listContainer: {
+    backgroundColor: colors.LIST_BG_COLOR,
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+  },
+  exploreText: {
+    fontWeight: 'bold',
+    fontSize: sizes.cardTitleFontSize,
+  },
+  subExploreText: {
+    fontSize: sizes.normalFontSize,
   },
 });
 

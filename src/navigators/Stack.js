@@ -4,27 +4,13 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Feather from 'react-native-vector-icons/Feather';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import {
-  Dashboard,
-  Calendar,
-  Projects,
-  Reports,
-  Tasks,
-  Onboarding,
-  Login,
-  SignUp,
-  Profile,
-  Chat,
-  Members,
-  Project,
-} from '../screens';
+import {Dashboard, Projects, Login, SignUp, Profile, Members} from '../screens';
 import appTheme from '../constants/colors';
 import {combineData} from '../utils/DataHelper';
 import {AuthContext} from '../context';
+import {CreateTask} from '../components/Task';
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -48,13 +34,6 @@ function CustomTabBar(props) {
     return color;
   };
 
-  const handleBottomModal = bottomModal => {
-    dispatch({
-      type: 'toggleBottomModal',
-      payload: {bottomModal},
-    });
-  };
-
   return (
     <View style={styles.menuWrapper}>
       <View style={styles.menuContainer}>
@@ -66,7 +45,7 @@ function CustomTabBar(props) {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.plusBtnContainer}
-          onPress={() => handleBottomModal('CreateProject')}>
+          onPress={() => handleNavigation('Create Task')}>
           <MaterialCommunityIcons name="plus" size={25} color="#fff" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleNavigation('Members')}>
@@ -91,10 +70,31 @@ function CustomTabBar(props) {
 const BottomStack = () => {
   return (
     <BottomTab.Navigator tabBar={props => <CustomTabBar {...props} />}>
-      <BottomTab.Screen name="My Tasks" component={Dashboard} options={{}} />
-      <BottomTab.Screen name="Tasks" component={Projects} />
-      <BottomTab.Screen name="Members" component={Members} />
-      <BottomTab.Screen name="Profile" component={Profile} />
+      <BottomTab.Screen
+        name="My Tasks"
+        component={Dashboard}
+        options={{headerShown: false}}
+      />
+      <BottomTab.Screen
+        name="Tasks"
+        component={Projects}
+        options={{headerShown: false}}
+      />
+      <BottomTab.Screen
+        name="Create Task"
+        component={CreateTask}
+        options={{headerShown: false}}
+      />
+      <BottomTab.Screen
+        name="Members"
+        component={Members}
+        options={{headerShown: false}}
+      />
+      <BottomTab.Screen
+        name="Profile"
+        component={Profile}
+        options={{headerShown: false}}
+      />
     </BottomTab.Navigator>
   );
 };
@@ -102,11 +102,6 @@ const BottomStack = () => {
 const SingleStack = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen
-        name="Onboarding"
-        component={Onboarding}
-        options={{headerShown: false}}
-      />
       <Stack.Screen
         name="Login"
         component={Login}
@@ -117,38 +112,13 @@ const SingleStack = () => {
         component={SignUp}
         options={{headerShown: false}}
       />
-      <Stack.Screen
-        name="Chat"
-        component={Chat}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="Project"
-        component={Project}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="Reports"
-        component={Reports}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="Calendar"
-        component={Calendar}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="Tasks"
-        component={Tasks}
-        options={{headerShown: false}}
-      />
     </Stack.Navigator>
   );
 };
 
 function AppStack() {
   return (
-    <Stack.Navigator initialRouteName="BottomStack">
+    <Stack.Navigator initialRouteName="SingleStack">
       <Stack.Screen
         name="SingleStack"
         component={SingleStack}

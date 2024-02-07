@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
-import appTheme from '../../constants/colors';
+import colors from '../../constants/colors';
+import sizes from '../../constants/fontSize';
 
 const styles = StyleSheet.create({
   container: {
@@ -20,18 +21,28 @@ const styles = StyleSheet.create({
     color: 'gray',
   },
   bodyContent: {
+    flex: 1,
     paddingHorizontal: 20,
     paddingTop: 40,
   },
   largeText: {
-    fontWeight: 'bold',
-    fontSize: 20,
+    fontFamily: 'Poppins-Regular',
+    fontSize: sizes.subHeaderFontSize,
+    color: 'black',
     lineHeight: 32,
+    marginBottom: 50,
+  },
+  middleText: {
+    fontSize: 16,
+    fontFamily: 'Poppins-Regular',
+    color: 'black',
+    fontWeight: 'bold',
     marginBottom: 10,
   },
   smallText: {
     fontSize: 14,
-    color: appTheme.INACTIVE_COLOR,
+    color: colors.sizes,
+    color: colors.fontSizeR,
     fontWeight: '500',
     marginBottom: 40,
   },
@@ -44,7 +55,12 @@ const styles = StyleSheet.create({
     marginBottom: 35,
     height: 40,
   },
-  textInput: {fontSize: 17, flex: 1, color: '#000', height: 45},
+  textInput: {
+    flex: 1,
+    fontSize: 16,
+    color: '#000',
+    height: 45,
+  },
   savePwdRow: {
     marginTop: 20,
     display: 'flex',
@@ -53,20 +69,24 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 40,
   },
-  savePwdText: {color: appTheme.COLOR2, fontWeight: 'bold'},
+  savePwdText: {
+    right: 0,
+    fontFamily: 'Poppins-Italic',
+  },
   loginBtnWrapper: {
-    backgroundColor: appTheme.PRIMARY_COLOR,
+    backgroundColor: '#6161ff',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 45,
+    height: 50,
     borderRadius: 7,
     marginBottom: 15,
   },
   loginBtnText: {fontWeight: 'bold', fontSize: 16, color: '#fff'},
   signUpBtnWrapper: {
-    borderColor: appTheme.INACTIVE_COLOR,
+    borderColor: colors.sizes,
+    borderColor: colors.fontSizeR,
     borderWidth: 1,
     display: 'flex',
     flexDirection: 'row',

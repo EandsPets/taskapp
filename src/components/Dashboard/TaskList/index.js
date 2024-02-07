@@ -6,8 +6,9 @@ import Feather from 'react-native-vector-icons/Feather';
 import shortid from 'shortid';
 import styles from './styles';
 import {AuthContext} from '../../../context';
+import colors from '../../../constants/colors';
 
-export function TaskListComponent({title, tasks, paddingTop}) {
+export function TaskListComponent({title, tasks, paddingTop, workingOn}) {
   const {state, dispatch} = useContext(AuthContext);
 
   const handleBottomModal = t_id => {
@@ -21,25 +22,27 @@ export function TaskListComponent({title, tasks, paddingTop}) {
       payload: {selectedTask: tasks.find(task => task.id === t_id)},
     });
   };
-  const header = [
-    'Title',
-    'Status',
-    'Due',
-    'Priority',
-    'Assigned by',
-    'Time Line',
-    'Assigned to',
-    'Recurring',
-    'Actions',
-  ];
+  const header = workingOn
+    ? ['Title', 'Due', 'Priority', 'Time Line', 'Actions']
+    : [
+        'Title',
+        'Status',
+        'Due',
+        'Priority',
+        'Assigned by',
+        'Time Line',
+        'Assigned to',
+        'Recurring',
+        'Actions',
+      ];
 
   const color = {
-    'In-Progress': '#daf542',
-    'To-do': '#f54242',
-    Completed: '#42f58d',
-    Low: '#42b0f5',
-    Medium: '#4269f5',
-    High: '#33367d',
+    'In-Progress': colors.IN_PROGRESS_COLOR,
+    'To-do': colors.PENDING_COLOR,
+    Completed: colors.COMPLETED_COLOR,
+    Low: colors.LOW_COLOR,
+    Medium: colors.MEDIUM_COLOR,
+    High: colors.HIGH_COLOR,
   };
 
   const renderTableCell = (value, index) => {
@@ -69,6 +72,7 @@ export function TaskListComponent({title, tasks, paddingTop}) {
       return (
         <DataTable.Cell
           key={index}
+          textStyle={styles.cellText}
           style={[
             styles.cellWidth,
             {
@@ -85,12 +89,16 @@ export function TaskListComponent({title, tasks, paddingTop}) {
 
   return (
     <View style={[styles.container, {paddingTop: paddingTop}]}>
-      <Text
-        variant="titleLarge"
-        style={{color: 'green', fontFamily: 'Poppins-Italic'}}>
-        {title} Tasks - 40%
+      <Text variant="titleLarge" style={styles.listTitle}>
+        {title}
       </Text>
-      <ScrollView horizontal={true}>
+      <ScrollView
+        horizontal={true}
+        style={
+          workingOn
+            ? styles.scrollViewWithoutHeader
+            : styles.scrollViewContainer
+        }>
         <DataTable>
           <DataTable.Header>
             {header.map((h, idx) => (
@@ -104,7 +112,20 @@ export function TaskListComponent({title, tasks, paddingTop}) {
           {tasks.map(task => (
             <DataTable.Row key={shortid.generate()}>
               {Object.entries(task)
-                .filter(([key]) => key !== 'id' && key !== 'note')
+                .filter(([key]) => {
+                  if (workingOn) {
+                    return (
+                      key !== 'id' &&
+                      key !== 'note' &&
+                      key !== 'status' &&
+                      key !== 'assigned_by' &&
+                      key !== 'assigned_to' &&
+                      key !== 'recurring'
+                    );
+                  } else {
+                    return key !== 'id' && key !== 'note';
+                  }
+                })
                 .map((value, index) => renderTableCell(value, index))}
               <DataTable.Cell key={shortid.generate()} style={styles.cellWidth}>
                 <TouchableWithoutFeedback

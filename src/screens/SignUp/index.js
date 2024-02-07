@@ -2,63 +2,50 @@ import React from 'react';
 import {
   View,
   Text,
+  ScrollView,
   SafeAreaView,
   TouchableOpacity,
   TextInput,
-  Switch,
 } from 'react-native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import Octicons from 'react-native-vector-icons/Octicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
 import styles from './signUpStyle';
 import {navigateToNestedRoute} from '../../navigators/RootNavigation';
 import {getScreenParent} from '../../utils/NavigationHelper';
-import appTheme from '../../constants/colors';
 
 export function SignUp({navigation}) {
-  const handleBackButton = () => {
-    navigation?.goBack();
-  };
-
   const handleNavigation = (screen, params) => {
     navigateToNestedRoute(getScreenParent(screen), screen, params);
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => handleBackButton()}>
-          <MaterialIcons name="keyboard-arrow-left" size={25} color="gray" />
-          <Text style={styles.backText}>Back</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.bodyContent}>
-        <Text style={styles.largeText}>Welcome Back!</Text>
-        <Text style={styles.smallText}>
-          Log into your account &amp; manage {'\n'}your tasks
-        </Text>
+      <ScrollView style={styles.bodyContent}>
+        <Text style={styles.largeText}>Let's get you registered!</Text>
+        <Text style={styles.middleText}>Registered</Text>
+        <Text style={styles.smallText}>Login with your information</Text>
         <View style={styles.inputRow}>
-          <Ionicons name="person-outline" size={20} color="gray" />
           <TextInput
-            placeholder="Username"
+            placeholder="Full Name"
             placeholderTextColor="gray"
             style={styles.textInput}
           />
         </View>
-        <View style={styles.inputRow}>
-          <MaterialCommunityIcons name="email-outline" size={20} color="gray" />
+        <View style={[styles.inputRow, {marginBottom: 10}]}>
+          <TextInput
+            placeholder="Phone"
+            placeholderTextColor="gray"
+            style={styles.textInput}
+          />
+        </View>
+        <View style={[styles.inputRow, {marginBottom: 10, marginTop: 25}]}>
           <TextInput
             placeholder="Email"
             placeholderTextColor="gray"
-            secureTextEntry={true}
             style={styles.textInput}
           />
         </View>
-        <View style={styles.inputRow}>
-          <MaterialIcons name="lock-outline" size={20} color="gray" />
+        <View style={[styles.inputRow, {marginBottom: 10, marginTop: 25}]}>
           <TextInput
             placeholder="Password"
             placeholderTextColor="gray"
@@ -67,25 +54,75 @@ export function SignUp({navigation}) {
           />
           <Octicons name="eye-closed" size={20} color="gray" />
         </View>
-        <View style={styles.savePwdRow}>
-          <Text style={styles.savePwdText}>Save Password</Text>
-          <Switch
-            trackColor={{false: appTheme.INACTIVE_COLOR, true: appTheme.COLOR2}}
-            thumbColor="#fff"
-            value={true}
+        <View style={[styles.inputRow, {marginBottom: 10, marginTop: 25}]}>
+          <TextInput
+            placeholder="Confirm Password"
+            placeholderTextColor="gray"
+            secureTextEntry={true}
+            style={styles.textInput}
+          />
+          <Octicons name="eye-closed" size={20} color="gray" />
+        </View>
+        <TouchableOpacity style={styles.loginBtnWrapper}>
+          <Text style={styles.loginBtnText}>Register</Text>
+        </TouchableOpacity>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginVertical: 25,
+          }}>
+          <View
+            style={{
+              width: '30%',
+              height: 1,
+              backgroundColor: 'grey',
+            }}
+          />
+          <Text
+            style={{
+              fontFamily: 'Poppins-Italic',
+              width: '40%',
+              textAlign: 'center',
+              justifyContent: 'center',
+            }}>
+            Or login with
+          </Text>
+          <View
+            style={{
+              width: '30%',
+              height: 1,
+              backgroundColor: 'grey',
+            }}
           />
         </View>
-        <TouchableOpacity style={styles.signUpBtnWrapper}>
-          <Text style={styles.signUpBtnText}>SIGN UP</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.loginBtnWrapper}
-          onPress={() => handleNavigation('Login')}>
-          <Text style={styles.loginBtnText}>
-            Already have an account? LOGIN
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            paddingBottom: 30,
+          }}>
+          <Entypo name="facebook-with-circle" size={80} color="#006093" />
+          <Entypo name="google--with-circle" size={80} color="#dd4a5c" />
+          <Entypo name="twitter-with-circle" size={80} color="#589bfc" />
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            paddingBottom: 80,
+          }}>
+          <Text style={{fontFamily: 'Poppins-Italic'}}>
+            Already have an account?{' '}
           </Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity onPress={() => handleNavigation('Login')}>
+            <Text style={{fontFamily: 'Poppins-Italic', color: 'red'}}>
+              Login Now
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
