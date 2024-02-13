@@ -7,20 +7,20 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
+import {useSelector} from 'react-redux';
 import {Button, Checkbox} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import shortid from 'shortid';
 import styles from './membersStyle';
 import appTheme from '../../constants/colors';
 import {TabScreenHeader, EmptyListComponent} from '../../components';
-import {AuthContext} from '../../context';
 import {navigateToNestedRoute} from '../../navigators/RootNavigation';
 import {getScreenParent} from '../../utils/NavigationHelper';
 import {UserListComponent} from '../../components/User';
+import {loadMembers} from '../../store/slices/membersSlice';
 
-export function Members() {
-  const {state, dispatch} = useContext(AuthContext);
-  const {members} = state;
+export function Members(props) {
+  const members = useSelector(state => state.members);
 
   const handleNavigation = (screen, params) => {
     navigateToNestedRoute(getScreenParent(screen), screen, params);
@@ -113,7 +113,7 @@ export function Members() {
             Send Invite
           </Button>
           <View style={{marginTop: 50}} />
-          <UserListComponent />
+          <UserListComponent members={members} />
         </View>
       </ScrollView>
     </SafeAreaView>

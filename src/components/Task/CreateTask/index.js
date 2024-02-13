@@ -8,6 +8,7 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
+import {useSelector} from 'react-redux';
 import shortid from 'shortid';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -16,15 +17,14 @@ import ToggleSwitch from 'toggle-switch-react-native';
 import {Calendar} from 'react-native-calendars';
 import styles from './createTaskStyle';
 import {combineData} from '../../../utils/DataHelper';
-import {AuthContext} from '../../../context';
 import {TabScreenHeader} from '../../../components';
 import appTheme from '../../../constants/colors';
 import sizes from '../../../constants/fontSize';
+import {loadTasks} from '../../store/slices/tasksSlice';
 const windowWidth = Dimensions.get('window').width;
 
-export function CreateTask() {
-  const {state, dispatch} = useContext(AuthContext);
-  const {members} = state;
+export function CreateTask(props) {
+  const members = useSelector(state => state.members);
   const [data, setData] = useState({
     newTask: {title: '', description: '', selectedMembers: []},
   });

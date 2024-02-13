@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -9,13 +9,56 @@ import {
 } from 'react-native';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Entypo from 'react-native-vector-icons/Entypo';
+import auth from '@react-native-firebase/auth';
+import firebase from '@react-native-firebase/app';
 import styles from './signUpStyle';
 import {navigateToNestedRoute} from '../../navigators/RootNavigation';
 import {getScreenParent} from '../../utils/NavigationHelper';
+// import firebase from '../../utils/config';
 
 export function SignUp({navigation}) {
+  const [userInfo, setUserInfo] = useState({
+    username: '',
+    phone: '',
+    email: '',
+    password: '',
+    confirm_password: '',
+  });
   const handleNavigation = (screen, params) => {
     navigateToNestedRoute(getScreenParent(screen), screen, params);
+  };
+
+  const chnageUserInfo = (value, key) => {
+    const info = {
+      ...userInfo,
+      [key]: value,
+    };
+
+    setUserInfo(info);
+  };
+
+  const signUp = async () => {
+    // navigation.navigate('SingleStack', {screen: 'SignUp'});
+
+    const userCredential = await auth().createUserWithEmailAndPassword(
+      userInfo.email,
+      userInfo.password,
+    );
+    const user = userCredential.user;
+
+    await createUserProfile(user.uid, userInfo.email, userInfo.phone);
+  };
+
+  const createUserProfile = async (uid, email, phone) => {
+    try {
+      await firebase.firestore().collection('users').doc(uid).set({
+        email,
+        phone,
+      });
+      console.log('User profile created successfully');
+    } catch (error) {
+      console.error('Error creating user profile:', error.message);
+    }
   };
 
   return (
@@ -29,6 +72,8 @@ export function SignUp({navigation}) {
             placeholder="Full Name"
             placeholderTextColor="gray"
             style={styles.textInput}
+            value={userInfo.username}
+            onChangeText={value => chnageUserInfo(value, 'username')}
           />
         </View>
         <View style={[styles.inputRow, {marginBottom: 10}]}>
@@ -36,6 +81,8 @@ export function SignUp({navigation}) {
             placeholder="Phone"
             placeholderTextColor="gray"
             style={styles.textInput}
+            value={userInfo.phone}
+            onChangeText={value => chnageUserInfo(value, 'phone')}
           />
         </View>
         <View style={[styles.inputRow, {marginBottom: 10, marginTop: 25}]}>
@@ -43,6 +90,8 @@ export function SignUp({navigation}) {
             placeholder="Email"
             placeholderTextColor="gray"
             style={styles.textInput}
+            value={userInfo.email}
+            onChangeText={value => chnageUserInfo(value, 'email')}
           />
         </View>
         <View style={[styles.inputRow, {marginBottom: 10, marginTop: 25}]}>
@@ -51,6 +100,8 @@ export function SignUp({navigation}) {
             placeholderTextColor="gray"
             secureTextEntry={true}
             style={styles.textInput}
+            value={userInfo.password}
+            onChangeText={value => chnageUserInfo(value, 'password')}
           />
           <Octicons name="eye-closed" size={20} color="gray" />
         </View>
@@ -60,10 +111,14 @@ export function SignUp({navigation}) {
             placeholderTextColor="gray"
             secureTextEntry={true}
             style={styles.textInput}
+            value={userInfo.confirm_password}
+            onChangeText={value => chnageUserInfo(value, 'confirm_password')}
           />
           <Octicons name="eye-closed" size={20} color="gray" />
         </View>
-        <TouchableOpacity style={styles.loginBtnWrapper}>
+        <TouchableOpacity
+          style={styles.loginBtnWrapper}
+          onPress={() => signUp()}>
           <Text style={styles.loginBtnText}>Register</Text>
         </TouchableOpacity>
         <View

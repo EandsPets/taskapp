@@ -10,17 +10,20 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import ProgressCircle from 'react-native-progress-circle';
 import {ProgressBar, MD3Colors} from 'react-native-paper';
+import {useSelector, useDispatch} from 'react-redux';
 import moment from 'moment';
 import styles from './dashboardStyle';
-import {AuthContext} from '../../context';
 import {TabScreenHeader} from '../../components';
 import {TaskListComponent} from '../../components/Dashboard/TaskList';
 import colors from '../../constants/colors';
 import fontSize from '../../constants/fontSize';
+import {loadTasks} from '../../store/slices/tasksSlice';
+// import {useGetTasksQuery} from '../../store/api/taskApi';
 
 export function Dashboard(props) {
-  const {state, dispatch} = useContext(AuthContext);
-  let {tasks} = state;
+  const tasks = useSelector(state => state.tasks);
+  const dispatch = useDispatch();
+  // const {tasks: tasks, isFetching, isSuccess} = useGetTasksQuery();
 
   const handleNavigation = (screen, params) => {
     props?.navigation.navigate('BottomStack', {screen: screen});

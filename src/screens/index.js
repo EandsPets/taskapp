@@ -4,4 +4,3 @@ export * from './Login';
 export * from './SignUp';
 export * from './Profile';
 export * from './Members';
-export * from './Project';

@@ -4,12 +4,10 @@ import {DataTable} from 'react-native-paper';
 import Feather from 'react-native-vector-icons/Feather';
 import shortid from 'shortid';
 import styles from './styles';
-import {AuthContext} from '../../context';
 import appTheme from '../../constants/colors';
 
-export function UserListComponent() {
-  const {state, dispatch} = useContext(AuthContext);
-  const {members} = state;
+export function UserListComponent(props) {
+  const {members} = props;
 
   const header = ['List', 'Status', 'Photo', 'Type', 'Block Device'];
 

@@ -6,21 +6,21 @@ import {
   SafeAreaView,
   ScrollView,
 } from 'react-native';
+import {useSelector} from 'react-redux';
 import shortid from 'shortid';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import ProgressCircle from 'react-native-progress-circle';
 import {ProgressBar} from 'react-native-paper';
 import {SelectList} from 'react-native-dropdown-select-list';
 import styles from './projectsStyle';
-import {AuthContext} from '../../context';
 import {TabScreenHeader, EmptyListComponent} from '../../components';
 import {TaskListComponent} from '../../components/Dashboard/TaskList';
 import colors from '../../constants/colors';
 import sizes from '../../constants/fontSize';
+import {loadTasks} from '../../store/slices/tasksSlice';
 
-export function Projects({navigation}) {
-  const {state, dispatch} = useContext(AuthContext);
-  const {tasks, members} = state;
+export function Projects(props) {
+  const tasks = useSelector(state => state.tasks);
 
   const users = [
     {key: '1', value: 'Aishas'},
