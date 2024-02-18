@@ -14,7 +14,7 @@ export default {
   IN_PROGRESS_COLOR: '#fdc900',
   COMPLETED_COLOR: '#05ce66',
   HIGH_COLOR: '#e65739',
-  MEDIUM_COLOR: '#e6c5c4',
+  MEDIUM_COLOR: '#F5BBB7',
   LOW_COLOR: '#6161ff',
   BORDER_COLOR: '#e6e6e6',
   EDIT_COLOR: '#07578a',

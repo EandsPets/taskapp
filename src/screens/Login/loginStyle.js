@@ -1,6 +1,7 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import colors from '../../constants/colors';
 import sizes from '../../constants/fontSize';
+const {width, height} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -26,21 +27,20 @@ const styles = StyleSheet.create({
     paddingTop: 40,
   },
   largeText: {
-    fontFamily: 'Poppins-Regular',
+    fontFamily: 'Poppins-Bold',
     fontSize: sizes.subHeaderFontSize,
     color: 'black',
-    lineHeight: 32,
+    lineHeight: 25,
     marginBottom: 50,
   },
   middleText: {
-    fontSize: 16,
-    fontFamily: 'Poppins-Regular',
+    fontSize: 18,
+    fontFamily: 'Poppins-Bold',
     color: 'black',
-    fontWeight: 'bold',
     marginBottom: 10,
   },
   smallText: {
-    fontSize: 14,
+    fontSize: 15,
     color: colors.sizes,
     color: colors.fontSizeR,
     fontWeight: '500',
@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    fontSize: 15,
     marginBottom: 40,
   },
   savePwdText: {
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     marginBottom: 15,
   },
-  loginBtnText: {fontWeight: 'bold', fontSize: 16, color: '#fff'},
+  loginBtnText: {fontWeight: 'bold', fontSize: 15, color: '#fff'},
   signUpBtnWrapper: {
     borderColor: colors.sizes,
     borderColor: colors.fontSizeR,
@@ -96,6 +97,19 @@ const styles = StyleSheet.create({
     borderRadius: 7,
   },
   signUpBtnText: {fontWeight: 'bold', fontSize: 16, color: '#000000aa'},
+  activityIndicator: {
+    position: 'absolute',
+    backgroundColor: 'rgba(0,0,0,0.1)',
+    width: width,
+    height: height,
+    zIndex: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorBorder: {
+    borderColor: 'red',
+  },
 });
 
 export default styles;

@@ -257,8 +257,8 @@ export function CreateTask(props) {
                 height: (windowWidth - 62) / 7,
                 borderRadius: 100,
                 borderWidth: 1,
-                borderColor: appTheme.HIGH_COLOR,
-                backgroundColor: '#fdf0e8',
+                borderColor: appTheme.MEDIUM_COLOR,
+                backgroundColor: '#FDF0E8',
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>

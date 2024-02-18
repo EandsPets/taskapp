@@ -1,23 +1,62 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
   SafeAreaView,
   TouchableOpacity,
+  ActivityIndicator,
   TextInput,
+  Alert,
 } from 'react-native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useDispatch, useSelector} from 'react-redux';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import styles from './loginStyle';
-import {navigateToNestedRoute} from '../../navigators/RootNavigation';
-import {getScreenParent} from '../../utils/NavigationHelper';
-import colors from '../../constants/colors';
+import {loginUser} from '../../store/actions/userAction';
 
 export function Login({navigation}) {
+  const dispatch = useDispatch();
+
   const handleNavigation = (screen, params) => {
     navigation.navigate('BottomStack', {screen: screen});
+  };
+
+  const {error} = useSelector(state => state.user);
+  const [userInfo, setUserInfo] = useState({
+    email: '',
+    password: '',
+  });
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const changeUserInfo = (value, key) => {
+    const info = {
+      ...userInfo,
+      [key]: value,
+    };
+
+    setUserInfo(info);
+  };
+
+  const login = () => {
+    if (userInfo.email.length === 0 || userInfo.password.length === 0) {
+      Alert.alert('Please enter all credentials');
+      return;
+    }
+    setIsLoading(true);
+    const {email, password} = userInfo;
+    dispatch(loginUser({email, password}))
+      .then(() => {
+        if (!error) {
+          handleNavigation('My Tasks');
+        }
+
+        if (typeof error === 'string') Alert.alert(error);
+      })
+      .catch(() => {})
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   return (
@@ -26,21 +65,32 @@ export function Login({navigation}) {
         <Text style={styles.largeText}>Let's get you signed in!</Text>
         <Text style={styles.middleText}>Login</Text>
         <Text style={styles.smallText}>Login with your information</Text>
-        <View style={styles.inputRow}>
-          <Ionicons name="person-outline" size={20} color="gray" />
+        <View
+          style={[
+            styles.inputRow,
+            error && error['email'] && styles.errorBorder,
+          ]}>
           <TextInput
-            placeholder="Email/Username"
+            placeholder="Email"
             placeholderTextColor="gray"
             style={styles.textInput}
+            value={userInfo.email}
+            onChangeText={value => changeUserInfo(value, 'email')}
           />
         </View>
-        <View style={[styles.inputRow, {marginBottom: 10}]}>
-          <MaterialIcons name="lock-outline" size={20} color="gray" />
+        <View
+          style={[
+            styles.inputRow,
+            error && error['password'] && styles.errorBorder,
+            {marginBottom: 10, marginTop: 25},
+          ]}>
           <TextInput
             placeholder="Password"
             placeholderTextColor="gray"
             secureTextEntry={true}
             style={styles.textInput}
+            value={userInfo.password}
+            onChangeText={value => changeUserInfo(value, 'password')}
           />
           <Octicons name="eye-closed" size={20} color="gray" />
         </View>
@@ -55,7 +105,7 @@ export function Login({navigation}) {
         </View>
         <TouchableOpacity
           style={styles.loginBtnWrapper}
-          onPress={() => handleNavigation('My Tasks')}>
+          onPress={() => login()}>
           <Text style={styles.loginBtnText}>Login</Text>
         </TouchableOpacity>
         <View
@@ -76,6 +126,7 @@ export function Login({navigation}) {
               fontFamily: 'Poppins-Italic',
               width: '40%',
               textAlign: 'center',
+              fontSize: 15,
               justifyContent: 'center',
             }}>
             Or login with
@@ -99,19 +150,29 @@ export function Login({navigation}) {
           <Entypo name="twitter-with-circle" size={80} color="#589bfc" />
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <Text style={{fontFamily: 'Poppins-Italic'}}>
+          <Text style={{fontFamily: 'Poppins-Italic', fontSize: 17}}>
             Already have an account?{' '}
           </Text>
           <TouchableOpacity
             onPress={() =>
               navigation.navigate('SingleStack', {screen: 'SignUp'})
             }>
-            <Text style={{fontFamily: 'Poppins-Italic', color: 'red'}}>
+            <Text
+              style={{
+                fontFamily: 'Poppins-Italic',
+                color: 'red',
+                fontSize: 17,
+              }}>
               Regster Now
             </Text>
           </TouchableOpacity>
         </View>
       </View>
+      {isLoading && (
+        <View style={styles.activityIndicator}>
+          <ActivityIndicator size="large" color="blue" />
+        </View>
+      )}
     </SafeAreaView>
   );
 }

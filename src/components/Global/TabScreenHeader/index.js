@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: 24,
+    fontSize: 23,
     color: 'black',
   },
   headerRightContainer: {
