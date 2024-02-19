@@ -1,7 +1,7 @@
 const membersState = {
   members: [
     {
-      id: '1234A',
+      id: 1,
       name: 'Mary Houston',
       status: 'Active',
       photo:
@@ -9,7 +9,7 @@ const membersState = {
       type: 'Admin',
     },
     {
-      id: '2345B',
+      id: 1,
       name: 'Alex Johan',
       status: 'Active',
       photo:
@@ -17,7 +17,7 @@ const membersState = {
       type: 'Admin',
     },
     {
-      id: '3456C',
+      id: 1,
       name: 'Veronica Tshult',
       status: 'Active',
       photo:
@@ -25,7 +25,7 @@ const membersState = {
       type: 'Admin',
     },
     {
-      id: '4567D',
+      id: 1,
       name: 'Bayo Olade',
       status: 'Active',
       photo:
@@ -33,7 +33,7 @@ const membersState = {
       type: 'Admin',
     },
     {
-      id: '5678E',
+      id: 1,
       name: 'Ahmad Hussein',
       status: 'Active',
       photo:
@@ -41,7 +41,7 @@ const membersState = {
       type: 'Admin',
     },
     {
-      id: '6789F',
+      id: 1,
       name: 'Gina Malo',
       status: 'Active',
       photo:
@@ -49,7 +49,7 @@ const membersState = {
       type: 'Admin',
     },
     {
-      id: '7890G',
+      id: 1,
       name: 'Wilfred Opeh',
       status: 'Active',
       photo:
@@ -57,7 +57,7 @@ const membersState = {
       type: 'Admin',
     },
     {
-      id: '8901H',
+      id: 1,
       name: 'Stacy Abraham',
       status: 'Active',
       photo:
@@ -65,7 +65,7 @@ const membersState = {
       type: 'Admin',
     },
     {
-      id: '9012I',
+      id: 1,
       name: 'Owen McClaren',
       status: 'Active',
       photo:
@@ -73,7 +73,7 @@ const membersState = {
       type: 'Admin',
     },
     {
-      id: '0123J',
+      id: 1,
       name: 'David Judah',
       status: 'Active',
       photo:
@@ -81,7 +81,7 @@ const membersState = {
       type: 'Admin',
     },
     {
-      id: '1234K',
+      id: 1,
       name: 'Blessing Opharevhe',
       status: 'Active',
       photo:
@@ -89,7 +89,7 @@ const membersState = {
       type: 'Admin',
     },
     {
-      id: '2345L',
+      id: 1,
       name: 'Chinwe Joseph',
       status: 'Active',
       photo:

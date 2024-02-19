@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -17,17 +17,37 @@ import {TabScreenHeader} from '../../components';
 import {TaskListComponent} from '../../components/Dashboard/TaskList';
 import colors from '../../constants/colors';
 import fontSize from '../../constants/fontSize';
-import {loadTasks} from '../../store/slices/tasksSlice';
-// import {useGetTasksQuery} from '../../store/api/taskApi';
+import {getTasks} from '../../store/actions/taskAction';
 
 export function Dashboard(props) {
-  const tasks = useSelector(state => state.tasks);
+  const tasks = useSelector(state => state.tasks.tasks);
   const dispatch = useDispatch();
-  // const {tasks: tasks, isFetching, isSuccess} = useGetTasksQuery();
+
+  useEffect(() => {
+    dispatch(getTasks());
+  }, [dispatch]);
 
   const handleNavigation = (screen, params) => {
     props?.navigation.navigate('BottomStack', {screen: screen});
   };
+
+  const workingOnHeader = [
+    'Title',
+    'Due',
+    'Priority',
+    'Time Started',
+    'Time Elapsed',
+    'Updates',
+  ];
+  const dashboardHeader = [
+    'Title',
+    'Updates',
+    'Status',
+    'Due',
+    'Priority',
+    'Assigned by',
+    'Recurring',
+  ];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -107,6 +127,7 @@ export function Dashboard(props) {
             <View style={styles.listContainer}>
               <TaskListComponent
                 title="Working on"
+                headers={workingOnHeader}
                 tasks={tasks}
                 workingOn={true}
               />
@@ -114,6 +135,7 @@ export function Dashboard(props) {
             <View style={[styles.listContainer, {marginTop: 10}]}>
               <TaskListComponent
                 title="Today"
+                headers={dashboardHeader}
                 tasks={tasks}
                 workingOn={false}
               />
@@ -127,10 +149,10 @@ export function Dashboard(props) {
             <View style={[styles.listContainer, {marginTop: 10}]}>
               <TaskListComponent
                 title="Next Week"
+                headers={dashboardHeader}
                 tasks={tasks}
                 workingOn={false}
               />
-
               <TouchableOpacity
                 style={styles.createNewTask}
                 onPress={() => handleNavigation('Create Task')}>
@@ -141,6 +163,7 @@ export function Dashboard(props) {
             <View style={[styles.listContainer, {marginTop: 10}]}>
               <TaskListComponent
                 title="Next Month"
+                headers={dashboardHeader}
                 tasks={tasks}
                 workingOn={false}
               />
@@ -155,6 +178,7 @@ export function Dashboard(props) {
               style={[styles.listContainer, {marginTop: 10, marginBottom: 30}]}>
               <TaskListComponent
                 title="With no due date"
+                headers={dashboardHeader}
                 tasks={tasks}
                 workingOn={false}
               />

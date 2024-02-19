@@ -7,48 +7,59 @@ import {
   ScrollView,
   Image,
   Dimensions,
+  ActivityIndicator,
+  Alert,
 } from 'react-native';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import shortid from 'shortid';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {SelectList} from 'react-native-dropdown-select-list';
 import ToggleSwitch from 'toggle-switch-react-native';
 import {Calendar} from 'react-native-calendars';
+import moment from 'moment';
+import DatePicker from 'react-native-date-picker';
 import styles from './createTaskStyle';
 import {combineData} from '../../../utils/DataHelper';
 import {TabScreenHeader} from '../../../components';
 import appTheme from '../../../constants/colors';
 import sizes from '../../../constants/fontSize';
-import {loadTasks} from '../../store/slices/tasksSlice';
+import {createNewTask} from '../../../store/actions/taskAction';
+import {priorities, days} from '../../../constants/const';
+
 const windowWidth = Dimensions.get('window').width;
 
 export function CreateTask(props) {
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+  const {error} = useSelector(state => state.tasks);
   const members = useSelector(state => state.members);
   const [data, setData] = useState({
-    newTask: {title: '', description: '', selectedMembers: []},
+    newTask: {
+      title: '',
+      description: '',
+      assigned_by: '1',
+      repeat_days: [],
+      start_time: new Date(),
+      finish_time: new Date(),
+      date: moment().format('DD/MM/YYYY'),
+    },
   });
   const [selected, setSelected] = useState('');
-
-  const priorities = [
-    {key: '1', value: 'High'},
-    {key: '2', value: 'Medium'},
-    {key: '3', value: 'Low'},
-  ];
-
-  const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+  const [openStart, setOpenStart] = useState(false);
+  const [openEnd, setOpenEnd] = useState(false);
 
   const handleSetValue = (field, value) => {
     let {newTask} = data;
-    if (field === 'selectedMembers') {
-      let {selectedMembers} = newTask;
-      const foundIndex = selectedMembers?.findIndex(a => a?.id === value?.id);
+    if (field === 'repeat_days') {
+      let {repeat_days} = newTask;
+      const foundIndex = repeat_days?.findIndex(a => a?.id === value?.id);
       if (foundIndex === -1) {
-        selectedMembers.push(value);
+        repeat_days.push(value);
       } else {
-        selectedMembers = selectedMembers.filter(a => a?.id !== value?.id);
+        repeat_days = repeat_days.filter(a => a?.id !== value?.id);
       }
-      newTask['selectedMembers'] = selectedMembers;
+      newTask['repeat_days'] = repeat_days;
     } else {
       newTask[field] = value;
     }
@@ -60,12 +71,35 @@ export function CreateTask(props) {
     );
   };
 
-  const isSelectedMember = member => {
+  const assign = () => {
+    setIsLoading(true);
+    const {newTask} = data;
+    const taskData = {
+      ...newTask,
+      start_time: moment(newTask.start_time).format('YYYY-MM-DD HH:mm:ss'),
+      finish_time: moment(newTask.finish_time).format('YYYY-MM-DD HH:mm:ss'),
+    };
+    dispatch(createNewTask(taskData))
+      .then(() => {
+        if (!error) {
+          // Alert.alert('Task created successfully.');
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const isSelectedMember = id => {
+    let {assigned_to} = data?.newTask;
+    return assigned_to === id;
+  };
+
+  const isSelectedDay = day => {
     let value;
-    let {selectedMembers} = data?.newTask;
-    const foundIndex = selectedMembers?.findIndex(
-      a => a?.id?.toLowerCase() == member?.id?.toLowerCase(),
-    );
+    let {repeat_days} = data?.newTask;
+    const foundIndex = repeat_days?.findIndex(a => a?.id == day?.id);
     if (foundIndex > -1) {
       value = true;
     }
@@ -83,15 +117,17 @@ export function CreateTask(props) {
         <View style={styles.cardContainer}>
           <TextInput
             placeholder="Title"
-            placeholderTextColor="gray"
+            placeholderTextColor={error && error['title'] ? 'red' : 'grey'}
             style={styles.textInput}
             onChangeText={text => handleSetValue('title', text)}
           />
           <TextInput
             placeholder="Description"
-            placeholderTextColor="gray"
+            placeholderTextColor={
+              error && error['description'] ? 'red' : 'grey'
+            }
             style={styles.detailInput}
-            onChangeText={text => handleSetValue('title', text)}
+            onChangeText={text => handleSetValue('description', text)}
             multiline={true}
             numberOfLines={5}
             textAlignVertical="top"
@@ -106,28 +142,30 @@ export function CreateTask(props) {
             }}>
             <Text style={styles.assignText}>Assign To</Text>
             <SelectList
-              setSelected={val => {}}
+              setSelected={val => handleSetValue('priority', val)}
               data={priorities}
-              defaultOption={priorities[0]}
-              boxStyles={{
-                width: 200,
-                backgroundColor: appTheme.LIST_BG_COLOR,
-                borderWidth: 0,
-              }}
+              boxStyles={[
+                styles.priorityContainer,
+                error && error['priority'] && styles.errorBorder,
+              ]}
             />
           </View>
           <ScrollView horizontal={true}>
-            <View style={styles.teamWrapper}>
+            <View
+              style={[
+                styles.teamWrapper,
+                error && error['assigned_to'] && styles.errorBorder,
+              ]}>
               {members?.map(member => (
                 <View key={shortid.generate()} style={{width: 80}}>
                   <TouchableOpacity
                     style={[
                       styles.memberWrapper,
-                      isSelectedMember(member)
+                      isSelectedMember(member.id)
                         ? styles.activeTeamWrapper
                         : null,
                     ]}
-                    onPress={() => handleSetValue('selectedMembers', member)}>
+                    onPress={() => handleSetValue('assigned_to', member.id)}>
                     <Image
                       style={styles.memberPhoto}
                       source={{uri: member?.photo}}
@@ -150,11 +188,12 @@ export function CreateTask(props) {
             height: 50,
             paddingHorizontal: 10,
           }}>
-          <Text>Date</Text>
+          <Text>{data.newTask.date}</Text>
           <AntDesign name="calendar" size={25} />
         </View>
         <Calendar
           onDayPress={day => {
+            handleSetValue('date', moment(day.dateString).format('DD/MM/YYYY'));
             setSelected(day.dateString);
           }}
           markedDates={{
@@ -221,13 +260,53 @@ export function CreateTask(props) {
           }}
         />
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <TouchableOpacity style={styles.timePickerContainer}>
-            <Text style={styles.text}>Start Time</Text>
+          <TouchableOpacity
+            style={styles.timePickerContainer}
+            onPress={() => setOpenStart(true)}>
+            <Text style={styles.text}>
+              {data.newTask.start_time
+                ? moment(data.newTask.start_time).format('HH:mm')
+                : 'Start Time'}
+            </Text>
             <Entypo name="back-in-time" size={25} />
+            <DatePicker
+              modal
+              title="Start time"
+              open={openStart}
+              date={data.newTask.start_time}
+              mode="time"
+              onConfirm={date => {
+                setOpenStart(false);
+                handleSetValue('start_time', date);
+              }}
+              onCancel={() => {
+                setOpenStart(false);
+              }}
+            />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.timePickerContainer}>
-            <Text style={styles.text}>Finish Time</Text>
+          <TouchableOpacity
+            style={styles.timePickerContainer}
+            onPress={() => setOpenEnd(true)}>
+            <Text style={styles.text}>
+              {data.newTask.start_time
+                ? moment(data.newTask.finish_time).format('HH:mm')
+                : 'End Time'}
+            </Text>
             <Entypo name="back-in-time" size={25} />
+            <DatePicker
+              modal
+              title="End time"
+              open={openEnd}
+              date={data.newTask.finish_time}
+              mode="time"
+              onConfirm={date => {
+                setOpenEnd(false);
+                handleSetValue('finish_time', date);
+              }}
+              onCancel={() => {
+                setOpenEnd(false);
+              }}
+            />
           </TouchableOpacity>
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -236,11 +315,11 @@ export function CreateTask(props) {
             <Entypo name="back-in-time" size={25} />
           </View>
           <ToggleSwitch
-            isOn={true}
+            isOn={data.newTask.is_repeat}
             onColor={appTheme.GREEN_COLOR}
             offColor={appTheme.LIST_BG_COLOR}
             size="large"
-            onToggle={isOn => console.log('changed to : ', isOn)}
+            onToggle={isOn => handleSetValue('is_repeat', isOn)}
           />
         </View>
         <View
@@ -249,39 +328,46 @@ export function CreateTask(props) {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          {days.map(day => (
-            <TouchableOpacity
-              key={shortid.generate()}
-              style={{
-                width: (windowWidth - 62) / 7,
-                height: (windowWidth - 62) / 7,
-                borderRadius: 100,
-                borderWidth: 1,
-                borderColor: appTheme.MEDIUM_COLOR,
-                backgroundColor: '#FDF0E8',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Text style={{fontSize: 20, color: 'black'}}>{day}</Text>
-            </TouchableOpacity>
-          ))}
+          {data.newTask.is_repeat &&
+            days.map(day => (
+              <TouchableOpacity
+                key={shortid.generate()}
+                style={{
+                  width: (windowWidth - 62) / 7,
+                  height: (windowWidth - 62) / 7,
+                  borderRadius: 100,
+                  borderWidth: 1,
+                  borderColor: appTheme.MEDIUM_COLOR,
+                  backgroundColor: isSelectedDay(day) ? '#f6c0bc' : '#FDF0E8',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+                onPress={() => handleSetValue('repeat_days', day)}>
+                <Text style={{fontSize: 20, color: 'black'}}>{day.value}</Text>
+              </TouchableOpacity>
+            ))}
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <View style={[styles.timePickerContainer, {width: '75%'}]}>
             <Text>Multitask</Text>
           </View>
           <ToggleSwitch
-            isOn={true}
+            isOn={data.newTask.multi_task}
             onColor={appTheme.GREEN_COLOR}
             offColor={appTheme.LIST_BG_COLOR}
             size="large"
-            onToggle={isOn => console.log('changed to : ', isOn)}
+            onToggle={isOn => handleSetValue('multi_task', isOn)}
           />
         </View>
-        <TouchableOpacity style={styles.btnWrapper}>
+        <TouchableOpacity style={styles.btnWrapper} onPress={() => assign()}>
           <Text style={styles.btnText}>Assign</Text>
         </TouchableOpacity>
       </ScrollView>
+      {isLoading && (
+        <View style={styles.activityIndicator}>
+          <ActivityIndicator size="large" color="blue" />
+        </View>
+      )}
     </View>
   );
 }

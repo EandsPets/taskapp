@@ -31,3 +31,28 @@ export const register = async userData => {
     throw error.response.data.message;
   }
 };
+
+export const getTasksApi = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/task`);
+    return response;
+  } catch (error) {
+    throw error.response.data.message;
+  }
+};
+
+export const createNewTaskApi = async data => {
+  try {
+    const response = await fetch(`${BASE_URL}/task`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    return response;
+  } catch (error) {
+    throw error.response.data.message;
+  }
+};

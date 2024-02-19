@@ -4,11 +4,18 @@ import {Text, DataTable} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import shortid from 'shortid';
+import moment from 'moment';
 import styles from './styles';
 import {AuthContext} from '../../../context';
 import colors from '../../../constants/colors';
 
-export function TaskListComponent({title, tasks, paddingTop, workingOn}) {
+export function TaskListComponent({
+  title,
+  headers,
+  tasks,
+  paddingTop,
+  workingOn,
+}) {
   const {state, dispatch} = useContext(AuthContext);
 
   const handleBottomModal = t_id => {
@@ -22,56 +29,51 @@ export function TaskListComponent({title, tasks, paddingTop, workingOn}) {
       payload: {selectedTask: tasks.find(task => task.id === t_id)},
     });
   };
-  const header = workingOn
-    ? ['Title', 'Due', 'Priority', 'Time Line', 'Actions']
-    : [
-        'Title',
-        'Status',
-        'Due',
-        'Priority',
-        'Assigned by',
-        'Time Line',
-        'Assigned to',
-        'Recurring',
-        'Actions',
-      ];
 
   const color = {
     'In-Progress': colors.IN_PROGRESS_COLOR,
-    'To-do': colors.PENDING_COLOR,
+    Pending: colors.PENDING_COLOR,
     Completed: colors.COMPLETED_COLOR,
     Low: colors.LOW_COLOR,
     Medium: colors.MEDIUM_COLOR,
     High: colors.HIGH_COLOR,
   };
 
-  const renderTableCell = (value, index) => {
-    if (Array.isArray(value[1])) {
+  const renderTableCell = (header, task) => {
+    const field = header.toLowerCase().replace(' ', '_');
+    if (field.includes('assigned')) {
       return (
-        <DataTable.Cell key={index} style={styles.cellWidth}>
-          {value[1]?.slice(0, 2)?.map(member => (
-            <Image
-              key={shortid.generate()}
-              style={styles.memberPhoto}
-              source={{uri: member?.photo}}
-            />
-          ))}
+        <DataTable.Cell key={task.id} style={styles.cellWidth}>
+          <Image
+            key={shortid.generate()}
+            style={styles.memberPhoto}
+            source={{uri: task[field]?.photo}}
+          />
         </DataTable.Cell>
       );
-    } else if (index === 7 && value[1] === true) {
+    } else if (field === 'recurring') {
       return (
-        <DataTable.Cell key={index} style={styles.cellWidth}>
+        <DataTable.Cell key={task.id} style={styles.cellWidth}>
           <Ionicons name="repeat" size={20} color="green" />
+        </DataTable.Cell>
+      );
+    } else if (field === 'updates') {
+      return (
+        <DataTable.Cell key={shortid.generate()} style={styles.cellWidth}>
+          <TouchableWithoutFeedback onPress={() => handleBottomModal(task.id)}>
+            <Feather name="edit" size={20} color="green" />
+          </TouchableWithoutFeedback>
         </DataTable.Cell>
       );
     } else {
       const colorForStatus =
-        index === 1 || index === 3 ? color[value[1]] : null;
+        field === 'status' || field === 'priority' ? color[task[field]] : null;
       const styleForTitle =
-        index === 0 ? {width: 150, justifyContent: 'start'} : null;
+        field === 'title' ? {width: 150, justifyContent: 'start'} : null;
+
       return (
         <DataTable.Cell
-          key={index}
+          key={task.id}
           textStyle={styles.cellText}
           style={[
             styles.cellWidth,
@@ -81,7 +83,9 @@ export function TaskListComponent({title, tasks, paddingTop, workingOn}) {
             },
             styleForTitle,
           ]}>
-          {value[1]}
+          {field === 'due'
+            ? moment(task['date'], 'DD/MM/YYYY').format('MMM D')
+            : task[field]}
         </DataTable.Cell>
       );
     }
@@ -101,7 +105,7 @@ export function TaskListComponent({title, tasks, paddingTop, workingOn}) {
         }>
         <DataTable>
           <DataTable.Header>
-            {header.map((h, idx) => (
+            {headers.map((h, idx) => (
               <DataTable.Title
                 style={[styles.cellWidth, {width: idx === 0 ? 150 : 100}]}
                 key={shortid.generate()}>
@@ -111,28 +115,7 @@ export function TaskListComponent({title, tasks, paddingTop, workingOn}) {
           </DataTable.Header>
           {tasks.map(task => (
             <DataTable.Row key={shortid.generate()}>
-              {Object.entries(task)
-                .filter(([key]) => {
-                  if (workingOn) {
-                    return (
-                      key !== 'id' &&
-                      key !== 'note' &&
-                      key !== 'status' &&
-                      key !== 'assigned_by' &&
-                      key !== 'assigned_to' &&
-                      key !== 'recurring'
-                    );
-                  } else {
-                    return key !== 'id' && key !== 'note';
-                  }
-                })
-                .map((value, index) => renderTableCell(value, index))}
-              <DataTable.Cell key={shortid.generate()} style={styles.cellWidth}>
-                <TouchableWithoutFeedback
-                  onPress={() => handleBottomModal(task.id)}>
-                  <Feather name="edit" size={20} color="green" />
-                </TouchableWithoutFeedback>
-              </DataTable.Cell>
+              {headers.map((header, index) => renderTableCell(header, task))}
             </DataTable.Row>
           ))}
         </DataTable>

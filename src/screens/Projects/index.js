@@ -17,7 +17,7 @@ import {TabScreenHeader, EmptyListComponent} from '../../components';
 import {TaskListComponent} from '../../components/Dashboard/TaskList';
 import colors from '../../constants/colors';
 import sizes from '../../constants/fontSize';
-import {loadTasks} from '../../store/slices/tasksSlice';
+import {loadTasks} from '../../store/slices/taskSlice';
 
 export function Projects(props) {
   const tasks = useSelector(state => state.tasks);
@@ -110,7 +110,7 @@ export function Projects(props) {
             </View>
             <View style={styles.listContainer}>
               <TaskListComponent
-                title={`Completed Tasks - 60%`}
+                title={`Completed Tasks`}
                 tasks={tasks.filter(task => task.status === 'Completed')}
                 workingOn={false}
               />
@@ -118,7 +118,7 @@ export function Projects(props) {
             <View
               style={[styles.listContainer, {marginTop: 10, marginBottom: 30}]}>
               <TaskListComponent
-                title="Incompleted Tasks - 40%"
+                title="Incompleted Tasks"
                 tasks={tasks.filter(task => task.status !== 'Completed')}
                 workingOn={false}
               />

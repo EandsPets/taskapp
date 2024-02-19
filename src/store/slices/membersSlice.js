@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = [
   {
-    id: '1234A',
+    id: '1',
     name: 'Mary Houston',
     status: 'Active',
     photo:

@@ -1,6 +1,7 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import colors from '../../../constants/colors';
 import sizes from '../../../constants/fontSize';
+const {width, height} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -99,6 +100,25 @@ const styles = StyleSheet.create({
   memberPhoto: {height: 60, width: 60, borderRadius: 50},
   memberName: {width: 60, textAlign: 'center', color: '#000', fontSize: 13},
   activeMemberName: {color: '#fff'},
+  activityIndicator: {
+    position: 'absolute',
+    backgroundColor: 'rgba(0,0,0,0.1)',
+    width: width,
+    height: height,
+    zIndex: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorBorder: {
+    borderWidth: 1,
+    borderColor: 'red',
+  },
+  priorityContainer: {
+    width: 200,
+    backgroundColor: colors.LIST_BG_COLOR,
+    borderWidth: 0,
+  },
 });
 
 export default styles;
