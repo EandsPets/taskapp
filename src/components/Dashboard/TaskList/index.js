@@ -1,5 +1,11 @@
 import React, {useContext} from 'react';
-import {View, ScrollView, Image, TouchableWithoutFeedback} from 'react-native';
+import {
+  View,
+  ScrollView,
+  Image,
+  TouchableWithoutFeedback,
+  Alert,
+} from 'react-native';
 import {Text, DataTable} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -57,11 +63,30 @@ export function TaskListComponent({
           <Ionicons name="repeat" size={20} color="green" />
         </DataTable.Cell>
       );
+    } else if (field.includes('elapsed')) {
+      const currentTime = moment();
+      const duration = moment.duration(
+        currentTime.diff(moment(task['time_started'], 'YYYY-MM-DD')),
+      );
+
+      const hoursDifference = Math.abs(duration.hours());
+      const minutesDifference = Math.abs(duration.minutes());
+      const differenceFormatted = moment
+        .utc()
+        .hours(hoursDifference)
+        .minutes(minutesDifference)
+        .format('HH:mm');
+
+      return (
+        <DataTable.Cell key={shortid.generate()} style={styles.cellWidth}>
+          {differenceFormatted}
+        </DataTable.Cell>
+      );
     } else if (field === 'updates') {
       return (
         <DataTable.Cell key={shortid.generate()} style={styles.cellWidth}>
-          <TouchableWithoutFeedback onPress={() => handleBottomModal(task.id)}>
-            <Feather name="edit" size={20} color="green" />
+          <TouchableWithoutFeedback>
+            <Image source={require('../../../assets/imgs/update.png')} />
           </TouchableWithoutFeedback>
         </DataTable.Cell>
       );
@@ -85,6 +110,10 @@ export function TaskListComponent({
           ]}>
           {field === 'due'
             ? moment(task['date'], 'DD/MM/YYYY').format('MMM D')
+            : field === 'time_started'
+            ? moment(task['time_started'], 'YYYY-MM-DD HH:mm:ss').format(
+                'h:mm A',
+              )
             : task[field]}
         </DataTable.Cell>
       );
@@ -96,30 +125,37 @@ export function TaskListComponent({
       <Text variant="titleLarge" style={styles.listTitle}>
         {title}
       </Text>
-      <ScrollView
-        horizontal={true}
+      <View
         style={
           workingOn
             ? styles.scrollViewWithoutHeader
             : styles.scrollViewContainer
         }>
-        <DataTable>
-          <DataTable.Header>
-            {headers.map((h, idx) => (
-              <DataTable.Title
-                style={[styles.cellWidth, {width: idx === 0 ? 150 : 100}]}
-                key={shortid.generate()}>
-                {h}
-              </DataTable.Title>
+        <ScrollView horizontal={true}>
+          <DataTable>
+            <DataTable.Header>
+              {headers.map((h, idx) => (
+                <DataTable.Title
+                  style={[
+                    styles.cellWidth,
+                    {
+                      width: idx === 0 ? 150 : 100,
+                      justifyContent: idx === 0 ? 'start' : 'center',
+                    },
+                  ]}
+                  key={shortid.generate()}>
+                  {h}
+                </DataTable.Title>
+              ))}
+            </DataTable.Header>
+            {tasks.tasks.map(task => (
+              <DataTable.Row key={shortid.generate()}>
+                {headers.map((header, index) => renderTableCell(header, task))}
+              </DataTable.Row>
             ))}
-          </DataTable.Header>
-          {tasks.map(task => (
-            <DataTable.Row key={shortid.generate()}>
-              {headers.map((header, index) => renderTableCell(header, task))}
-            </DataTable.Row>
-          ))}
-        </DataTable>
-      </ScrollView>
+          </DataTable>
+        </ScrollView>
+      </View>
     </View>
   );
 }

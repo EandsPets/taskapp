@@ -5,48 +5,83 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
+  Alert,
+  Image,
 } from 'react-native';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import ProgressCircle from 'react-native-progress-circle';
-import {ProgressBar, MD3Colors} from 'react-native-paper';
+import {ProgressBar} from 'react-native-paper';
 import {useSelector, useDispatch} from 'react-redux';
 import moment from 'moment';
+import shortid from 'shortid';
 import styles from './dashboardStyle';
 import {TabScreenHeader} from '../../components';
 import {TaskListComponent} from '../../components/Dashboard/TaskList';
 import colors from '../../constants/colors';
 import fontSize from '../../constants/fontSize';
+import {workingOnHeader, dashboardHeader} from '../../constants/const';
 import {getTasks} from '../../store/actions/taskAction';
+import {
+  getWorkingTasks,
+  getTasksBeforeToday,
+  getTodayTasks,
+  getNextWeekTasks,
+  getNextMonthTasks,
+  getWithNoDueTasks,
+  getPercent,
+} from '../../utils/helper';
 
 export function Dashboard(props) {
   const tasks = useSelector(state => state.tasks.tasks);
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(getTasks());
+    setIsLoading(true);
+    dispatch(getTasks())
+      .then(() => setIsLoading(false))
+      .catch(() => setIsLoading(false));
   }, [dispatch]);
 
   const handleNavigation = (screen, params) => {
     props?.navigation.navigate('BottomStack', {screen: screen});
   };
 
-  const workingOnHeader = [
-    'Title',
-    'Due',
-    'Priority',
-    'Time Started',
-    'Time Elapsed',
-    'Updates',
+  const firstCardData = [
+    {
+      img: require('../../assets/imgs/rocket.png'),
+      count: tasks.length,
+      text: 'All',
+    },
+    {
+      img: require('../../assets/imgs/chart.png'),
+      count: getTasksBeforeToday(tasks).count,
+      text: 'Past',
+    },
+    {
+      img: require('../../assets/imgs/today.png'),
+      count: getTodayTasks(tasks).count,
+      text: 'Today',
+    },
   ];
-  const dashboardHeader = [
-    'Title',
-    'Updates',
-    'Status',
-    'Due',
-    'Priority',
-    'Assigned by',
-    'Recurring',
+
+  const secondCardData = [
+    {
+      img: require('../../assets/imgs/notify.png'),
+      count: getNextWeekTasks(tasks).count,
+      text: 'Next Week',
+    },
+    {
+      img: require('../../assets/imgs/layer.png'),
+      count: getNextMonthTasks(tasks).count,
+      text: 'Later',
+    },
+    {
+      img: require('../../assets/imgs/award.png'),
+      count: getWithNoDueTasks(tasks).count,
+      text: 'Without a date',
+    },
   ];
 
   return (
@@ -78,29 +113,28 @@ export function Dashboard(props) {
               </View>
               <View style={styles.progressContainer}>
                 <ProgressCircle
-                  percent={60}
+                  key={shortid.generate()}
+                  percent={getPercent(tasks)}
                   radius={50}
                   borderWidth={8}
                   color="#05ce66"
                   shadowColor="#d9d9d9"
                   bgColor="#fff">
-                  <Text style={styles.circleText}>{'60%'}</Text>
+                  <Text style={styles.circleText}>{getPercent(tasks)}%</Text>
                 </ProgressCircle>
               </View>
             </View>
             <Text style={styles.progressText}>My Progress</Text>
             <View style={styles.cardContainer}>
-              {[1, 2, 3].map(() => (
-                <View style={styles.singleExplore}>
+              {firstCardData.map(data => (
+                <View style={styles.singleExplore} key={shortid.generate()}>
                   <View style={styles.circle}>
-                    <SimpleLineIcons
-                      name="settings"
-                      size={22}
-                      color={colors.PRIMARY_COLOR}
-                    />
+                    <Image source={data.img} />
                   </View>
-                  <Text style={[styles.exploreText, {color: '#000'}]}>35</Text>
-                  <Text style={styles.subExploreText}>Next Week</Text>
+                  <Text style={[styles.exploreText, {color: '#000'}]}>
+                    {data.count}
+                  </Text>
+                  <Text style={styles.subExploreText}>{data.text}</Text>
                   <ProgressBar
                     progress={0.5}
                     color={colors.PRIMARY_COLOR}
@@ -110,17 +144,20 @@ export function Dashboard(props) {
               ))}
             </View>
             <View style={styles.cardContainer}>
-              {[1, 2, 3].map(() => (
-                <View style={styles.singleExplore}>
+              {secondCardData.map(data => (
+                <View style={styles.singleExplore} key={shortid.generate()}>
                   <View style={styles.circle}>
-                    <SimpleLineIcons
-                      name="settings"
-                      size={22}
-                      color={colors.PRIMARY_COLOR}
-                    />
+                    <Image source={data.img} />
                   </View>
-                  <Text style={[styles.exploreText, {color: '#000'}]}>35</Text>
-                  <Text style={styles.subExploreText}>Next Week</Text>
+                  <Text style={[styles.exploreText, {color: '#000'}]}>
+                    {data.count}
+                  </Text>
+                  <Text style={styles.subExploreText}>{data.text}</Text>
+                  <ProgressBar
+                    progress={0.5}
+                    color={colors.PRIMARY_COLOR}
+                    style={styles.progressBar}
+                  />
                 </View>
               ))}
             </View>
@@ -128,7 +165,7 @@ export function Dashboard(props) {
               <TaskListComponent
                 title="Working on"
                 headers={workingOnHeader}
-                tasks={tasks}
+                tasks={getWorkingTasks(tasks)}
                 workingOn={true}
               />
             </View>
@@ -136,7 +173,7 @@ export function Dashboard(props) {
               <TaskListComponent
                 title="Today"
                 headers={dashboardHeader}
-                tasks={tasks}
+                tasks={getTodayTasks(tasks)}
                 workingOn={false}
               />
               <TouchableOpacity
@@ -150,7 +187,7 @@ export function Dashboard(props) {
               <TaskListComponent
                 title="Next Week"
                 headers={dashboardHeader}
-                tasks={tasks}
+                tasks={getNextWeekTasks(tasks)}
                 workingOn={false}
               />
               <TouchableOpacity
@@ -164,7 +201,7 @@ export function Dashboard(props) {
               <TaskListComponent
                 title="Next Month"
                 headers={dashboardHeader}
-                tasks={tasks}
+                tasks={getNextMonthTasks(tasks)}
                 workingOn={false}
               />
               <TouchableOpacity
@@ -179,7 +216,7 @@ export function Dashboard(props) {
               <TaskListComponent
                 title="With no due date"
                 headers={dashboardHeader}
-                tasks={tasks}
+                tasks={getWithNoDueTasks(tasks)}
                 workingOn={false}
               />
               <TouchableOpacity
@@ -190,6 +227,11 @@ export function Dashboard(props) {
               </TouchableOpacity>
             </View>
           </ScrollView>
+          {isLoading && (
+            <View style={styles.activityIndicator}>
+              <ActivityIndicator size="large" color="blue" />
+            </View>
+          )}
         </View>
       </View>
     </SafeAreaView>

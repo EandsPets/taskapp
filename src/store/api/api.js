@@ -1,3 +1,5 @@
+import {Alert} from 'react-native';
+
 const BASE_URL = 'http://192.168.8.191:8000/api';
 
 export const login = async credentials => {
@@ -34,7 +36,13 @@ export const register = async userData => {
 
 export const getTasksApi = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/task`);
+    const response = await fetch(`${BASE_URL}/task`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
     return response;
   } catch (error) {
     throw error.response.data.message;

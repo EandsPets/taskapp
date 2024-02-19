@@ -13,3 +13,21 @@ export const days = [
   {id: 5, value: 'F'},
   {id: 6, value: 'S'},
 ];
+
+export const workingOnHeader = [
+  'Title',
+  'Due',
+  'Priority',
+  'Time Started',
+  'Time Elapsed',
+  'Updates',
+];
+export const dashboardHeader = [
+  'Title',
+  'Updates',
+  'Status',
+  'Due',
+  'Priority',
+  'Assigned by',
+  'Recurring',
+];

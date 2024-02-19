@@ -12,17 +12,17 @@ import {createNewTaskApi, getTasksApi} from '../api/api';
 export const getTasks = () => async dispatch => {
   dispatch(getTasksStart());
   try {
-    const response = await getTasksApi(data);
+    const response = await getTasksApi();
     if (!response.ok) {
       const errorData = await response.json();
       const errMsg = errorData.error ? errorData.error : errorData.message;
       dispatch(getTasksFailure(errMsg));
     } else {
       const taskData = await response.json();
-      Alert.alert(JSON.stringify(taskData.task));
-      dispatch(getTasksSuccess(taskData.task));
+      dispatch(getTasksSuccess(taskData.tasks));
     }
   } catch (error) {
+    Alert.alert(JSON.stringify(error));
     dispatch(getTasksFailure(error));
   }
 };

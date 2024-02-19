@@ -7,7 +7,7 @@ const initialState = {
 };
 
 const taskSlice = createSlice({
-  name: 'task',
+  name: 'tasks',
   initialState,
   reducers: {
     getTasksStart(state) {

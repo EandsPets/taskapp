@@ -32,6 +32,7 @@ const windowWidth = Dimensions.get('window').width;
 export function CreateTask(props) {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
+  const [openCalendar, setOpenCalendar] = useState(false);
   const {error} = useSelector(state => state.tasks);
   const members = useSelector(state => state.members);
   const [data, setData] = useState({
@@ -42,7 +43,6 @@ export function CreateTask(props) {
       repeat_days: [],
       start_time: new Date(),
       finish_time: new Date(),
-      date: moment().format('DD/MM/YYYY'),
     },
   });
   const [selected, setSelected] = useState('');
@@ -82,7 +82,7 @@ export function CreateTask(props) {
     dispatch(createNewTask(taskData))
       .then(() => {
         if (!error) {
-          // Alert.alert('Task created successfully.');
+          Alert.alert('Task created successfully.');
         }
       })
       .catch(() => {})
@@ -176,7 +176,8 @@ export function CreateTask(props) {
             </View>
           </ScrollView>
         </View>
-        <View
+        <TouchableOpacity
+          onPress={() => setOpenCalendar(!openCalendar)}
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -188,77 +189,82 @@ export function CreateTask(props) {
             height: 50,
             paddingHorizontal: 10,
           }}>
-          <Text>{data.newTask.date}</Text>
+          <Text>{data.newTask.date ? data.newTask.date : 'Select Date'}</Text>
           <AntDesign name="calendar" size={25} />
-        </View>
-        <Calendar
-          onDayPress={day => {
-            handleSetValue('date', moment(day.dateString).format('DD/MM/YYYY'));
-            setSelected(day.dateString);
-          }}
-          markedDates={{
-            [selected]: {
-              selected: true,
-              disableTouchEvent: true,
-              selectedDotColor: 'orange',
-            },
-          }}
-          style={{
-            borderWidth: 0,
-            borderRadius: 10,
-            borderColor: 'gray',
-            height: 350,
-          }}
-          theme={{
-            backgroundColor: '#ffffff',
-            calendarBackground: appTheme.CALENDAR_BODY_COLOR,
-            textSectionTitleColor: '#b6c1cd',
-            textSectionTitleDisabledColor: '#d9e1e8',
-            selectedDayBackgroundColor: '#00adf5',
-            selectedDayTextColor: '#ffffff',
-            todayTextColor: '#00adf5',
-            dayTextColor: '#2d4150',
-            textDisabledColor: '#d9e1e8',
-            dotColor: '#00adf5',
-            selectedDotColor: '#ffffff',
-            arrowColor: appTheme.PRIMARY_COLOR,
-            disabledArrowColor: '#d9e1e8',
-            monthTextColor: appTheme.PRIMARY_COLOR,
-            indicatorColor: 'blue',
-            textDayFontFamily: 'Poppins-Regular',
-            textMonthFontFamily: 'Poppins-Regular',
-            textDayHeaderFontFamily: 'Poppins-Regular',
-            textDayFontWeight: '300',
-            textMonthFontWeight: 'bold',
-            textDayHeaderFontWeight: '300',
-            textDayFontSize: 18,
-            textMonthFontSize: sizes.cardTitleFontSize,
-            textDayHeaderFontSize: 18,
-            'stylesheet.calendar.header': {
-              dayTextAtIndex0: {
-                color: 'red',
+        </TouchableOpacity>
+        {openCalendar && (
+          <Calendar
+            onDayPress={day => {
+              handleSetValue(
+                'date',
+                moment(day.dateString).format('DD/MM/YYYY'),
+              );
+              setSelected(day.dateString);
+            }}
+            markedDates={{
+              [selected]: {
+                selected: true,
+                disableTouchEvent: true,
+                selectedDotColor: 'orange',
               },
-              dayTextAtIndex1: {
-                color: appTheme.PRIMARY_COLOR,
+            }}
+            style={{
+              borderWidth: 0,
+              borderRadius: 10,
+              borderColor: 'gray',
+              height: 350,
+            }}
+            theme={{
+              backgroundColor: '#ffffff',
+              calendarBackground: appTheme.CALENDAR_BODY_COLOR,
+              textSectionTitleColor: '#b6c1cd',
+              textSectionTitleDisabledColor: '#d9e1e8',
+              selectedDayBackgroundColor: '#00adf5',
+              selectedDayTextColor: '#ffffff',
+              todayTextColor: '#00adf5',
+              dayTextColor: '#2d4150',
+              textDisabledColor: '#d9e1e8',
+              dotColor: '#00adf5',
+              selectedDotColor: '#ffffff',
+              arrowColor: appTheme.PRIMARY_COLOR,
+              disabledArrowColor: '#d9e1e8',
+              monthTextColor: appTheme.PRIMARY_COLOR,
+              indicatorColor: 'blue',
+              textDayFontFamily: 'Poppins-Regular',
+              textMonthFontFamily: 'Poppins-Regular',
+              textDayHeaderFontFamily: 'Poppins-Regular',
+              textDayFontWeight: '300',
+              textMonthFontWeight: 'bold',
+              textDayHeaderFontWeight: '300',
+              textDayFontSize: 18,
+              textMonthFontSize: sizes.cardTitleFontSize,
+              textDayHeaderFontSize: 18,
+              'stylesheet.calendar.header': {
+                dayTextAtIndex0: {
+                  color: 'red',
+                },
+                dayTextAtIndex1: {
+                  color: appTheme.PRIMARY_COLOR,
+                },
+                dayTextAtIndex2: {
+                  color: appTheme.PRIMARY_COLOR,
+                },
+                dayTextAtIndex3: {
+                  color: appTheme.PRIMARY_COLOR,
+                },
+                dayTextAtIndex4: {
+                  color: appTheme.PRIMARY_COLOR,
+                },
+                dayTextAtIndex5: {
+                  color: appTheme.PRIMARY_COLOR,
+                },
+                dayTextAtIndex6: {
+                  color: appTheme.PRIMARY_COLOR,
+                },
               },
-              dayTextAtIndex2: {
-                color: appTheme.PRIMARY_COLOR,
-              },
-              dayTextAtIndex3: {
-                color: appTheme.PRIMARY_COLOR,
-              },
-              dayTextAtIndex4: {
-                color: appTheme.PRIMARY_COLOR,
-              },
-              dayTextAtIndex5: {
-                color: appTheme.PRIMARY_COLOR,
-              },
-              dayTextAtIndex6: {
-                color: appTheme.PRIMARY_COLOR,
-              },
-            },
-          }}
-        />
+            }}
+          />
+        )}
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <TouchableOpacity
             style={styles.timePickerContainer}

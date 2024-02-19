@@ -1,6 +1,7 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import colors from '../../constants/colors';
 import sizes from '../../constants/fontSize';
+const {width, height} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -103,6 +104,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginTop: 10,
     borderRadius: 5,
+  },
+  activityIndicator: {
+    position: 'absolute',
+    backgroundColor: 'rgba(0,0,0,0.1)',
+    width: width,
+    height: height,
+    zIndex: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

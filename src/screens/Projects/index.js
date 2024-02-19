@@ -13,7 +13,7 @@ import ProgressCircle from 'react-native-progress-circle';
 import {ProgressBar} from 'react-native-paper';
 import {SelectList} from 'react-native-dropdown-select-list';
 import styles from './projectsStyle';
-import {TabScreenHeader, EmptyListComponent} from '../../components';
+import {TabScreenHeader} from '../../components';
 import {TaskListComponent} from '../../components/Dashboard/TaskList';
 import colors from '../../constants/colors';
 import sizes from '../../constants/fontSize';

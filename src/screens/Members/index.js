@@ -13,7 +13,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import shortid from 'shortid';
 import styles from './membersStyle';
 import appTheme from '../../constants/colors';
-import {TabScreenHeader, EmptyListComponent} from '../../components';
+import {TabScreenHeader} from '../../components';
 import {navigateToNestedRoute} from '../../navigators/RootNavigation';
 import {getScreenParent} from '../../utils/NavigationHelper';
 import {UserListComponent} from '../../components/User';
