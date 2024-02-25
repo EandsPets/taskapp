@@ -1,9 +1,7 @@
 import moment from 'moment';
 
 export const getWorkingTasks = tasks => {
-  const filteredTasks = tasks.filter(
-    task => task.time_started && !task.time_finished,
-  );
+  const filteredTasks = tasks.filter(task => task.started && !task.completed);
 
   return {tasks: filteredTasks, count: filteredTasks.length};
 };
@@ -78,6 +76,30 @@ export const getPercent = tasks => {
   );
 
   return allTasks.length === 0
-    ? 0
+    ? 100
     : Math.ceil((completedTasks.length / allTasks.length) * 100);
+};
+
+export const getCompletedTasks = tasks => {
+  const completedTasks = tasks.filter(task => task.status === 'Completed');
+  return {tasks: completedTasks, count: completedTasks.length};
+};
+
+export const getIncompleteTasksBeforeToday = tasks => {
+  const todayDate = moment().format('YYYY-MM-DD');
+
+  // const incompleteTasks = tasks.filter(task => {
+  //   return (
+  //     task.status !== 'Completed' &&
+  //     task.date &&
+  //     moment(task.start_time, 'YYYY-MM-DD').isBefore(todayDate, 'day')
+  //   );
+
+  const incompleteTasks = tasks.filter(
+    task =>
+      moment(task['start_time'], 'YYYY-MM-DD').format('YYYY-MM-DD') ===
+        todayDate && task.status !== 'Completed',
+  );
+
+  return {tasks: incompleteTasks, count: incompleteTasks.length};
 };

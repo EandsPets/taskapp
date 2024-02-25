@@ -20,8 +20,12 @@ import {TabScreenHeader} from '../../components';
 import {TaskListComponent} from '../../components/Dashboard/TaskList';
 import colors from '../../constants/colors';
 import fontSize from '../../constants/fontSize';
-import {workingOnHeader, dashboardHeader} from '../../constants/const';
-import {getTasks} from '../../store/actions/taskAction';
+import {
+  workingOnHeader,
+  dashboardHeader,
+  withNoDueDateHeader,
+} from '../../constants/const';
+import {getTasksByUser} from '../../store/actions/taskAction';
 import {
   getWorkingTasks,
   getTasksBeforeToday,
@@ -39,7 +43,7 @@ export function Dashboard(props) {
 
   useEffect(() => {
     setIsLoading(true);
-    dispatch(getTasks())
+    dispatch(getTasksByUser(1))
       .then(() => setIsLoading(false))
       .catch(() => setIsLoading(false));
   }, [dispatch]);
@@ -53,16 +57,19 @@ export function Dashboard(props) {
       img: require('../../assets/imgs/rocket.png'),
       count: tasks.length,
       text: 'All',
+      color: colors.PRIMARY_COLOR,
     },
     {
       img: require('../../assets/imgs/chart.png'),
       count: getTasksBeforeToday(tasks).count,
       text: 'Past',
+      color: colors.HIGH_COLOR,
     },
     {
       img: require('../../assets/imgs/today.png'),
       count: getTodayTasks(tasks).count,
       text: 'Today',
+      color: colors.GREEN_COLOR,
     },
   ];
 
@@ -71,16 +78,19 @@ export function Dashboard(props) {
       img: require('../../assets/imgs/notify.png'),
       count: getNextWeekTasks(tasks).count,
       text: 'Next Week',
+      color: colors.IN_PROGRESS_COLOR,
     },
     {
       img: require('../../assets/imgs/layer.png'),
       count: getNextMonthTasks(tasks).count,
       text: 'Later',
+      color: colors.LAYER_COLOR,
     },
     {
       img: require('../../assets/imgs/award.png'),
       count: getWithNoDueTasks(tasks).count,
       text: 'Without a date',
+      color: colors.HIGH_COLOR,
     },
   ];
 
@@ -120,7 +130,7 @@ export function Dashboard(props) {
                   color="#05ce66"
                   shadowColor="#d9d9d9"
                   bgColor="#fff">
-                  <Text style={styles.circleText}>{getPercent(tasks)}%</Text>
+                  <Text style={styles.circleText}>{getPercent(tasks)}</Text>
                 </ProgressCircle>
               </View>
             </View>
@@ -137,7 +147,7 @@ export function Dashboard(props) {
                   <Text style={styles.subExploreText}>{data.text}</Text>
                   <ProgressBar
                     progress={0.5}
-                    color={colors.PRIMARY_COLOR}
+                    color={data.color}
                     style={styles.progressBar}
                   />
                 </View>
@@ -155,7 +165,7 @@ export function Dashboard(props) {
                   <Text style={styles.subExploreText}>{data.text}</Text>
                   <ProgressBar
                     progress={0.5}
-                    color={colors.PRIMARY_COLOR}
+                    color={data.color}
                     style={styles.progressBar}
                   />
                 </View>
@@ -215,7 +225,7 @@ export function Dashboard(props) {
               style={[styles.listContainer, {marginTop: 10, marginBottom: 30}]}>
               <TaskListComponent
                 title="With no due date"
-                headers={dashboardHeader}
+                headers={withNoDueDateHeader}
                 tasks={getWithNoDueTasks(tasks)}
                 workingOn={false}
               />

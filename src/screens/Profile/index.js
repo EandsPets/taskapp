@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Fontisto from 'react-native-vector-icons/Fontisto';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import styles from './profileStyle';
 import appTheme from '../../constants/colors';
@@ -17,10 +16,11 @@ import {AuthContext} from '../../context';
 import {TabScreenHeader} from '../../components';
 import {navigateToNestedRoute} from '../../navigators/RootNavigation';
 import {getScreenParent} from '../../utils/NavigationHelper';
+import {useSelector} from 'react-redux';
 
 export function Profile({navigation}) {
   const {state, dispatch} = useContext(AuthContext);
-  const {user} = state;
+  const {user} = useSelector(state => state.user);
 
   const handleBackButton = () => {
     navigation?.goBack();

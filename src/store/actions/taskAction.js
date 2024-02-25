@@ -9,10 +9,10 @@ import {
 import {Alert} from 'react-native';
 import {createNewTaskApi, getTasksApi} from '../api/api';
 
-export const getTasks = () => async dispatch => {
+export const getTasksByUser = user_id => async dispatch => {
   dispatch(getTasksStart());
   try {
-    const response = await getTasksApi();
+    const response = await getTasksApi(user_id);
     if (!response.ok) {
       const errorData = await response.json();
       const errMsg = errorData.error ? errorData.error : errorData.message;

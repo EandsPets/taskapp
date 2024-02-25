@@ -34,15 +34,29 @@ export const register = async userData => {
   }
 };
 
-export const getTasksApi = async () => {
+export const searchUserApi = async phone_number => {
   try {
-    const response = await fetch(`${BASE_URL}/task`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await fetch(
+      `${BASE_URL}/user/search?phone_number=${phone_number}`,
+    );
+    return response;
+  } catch (error) {
+    throw error.response.data.message;
+  }
+};
+
+export const getUsersApi = async user_id => {
+  try {
+    const response = await fetch(`${BASE_URL}/invitation?user_id=${user_id}`);
+    return response;
+  } catch (error) {
+    throw error.response.data.message;
+  }
+};
+
+export const getTasksApi = async user_id => {
+  try {
+    const response = await fetch(`${BASE_URL}/task?user_id=${user_id}`);
     return response;
   } catch (error) {
     throw error.response.data.message;

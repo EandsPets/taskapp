@@ -24,18 +24,6 @@ export function TaskListComponent({
 }) {
   const {state, dispatch} = useContext(AuthContext);
 
-  const handleBottomModal = t_id => {
-    dispatch({
-      type: 'toggleBottomModal',
-      payload: {bottomModal: 'TaskView'},
-    });
-
-    dispatch({
-      type: 'viewTask',
-      payload: {selectedTask: tasks.find(task => task.id === t_id)},
-    });
-  };
-
   const color = {
     'In-Progress': colors.IN_PROGRESS_COLOR,
     Pending: colors.PENDING_COLOR,
@@ -63,7 +51,11 @@ export function TaskListComponent({
           <Ionicons name="repeat" size={20} color="green" />
         </DataTable.Cell>
       );
-    } else if (field.includes('elapsed')) {
+    } else if (
+      field.includes('elapsed') ||
+      field.includes('taken') ||
+      field.includes('past')
+    ) {
       const currentTime = moment();
       const duration = moment.duration(
         currentTime.diff(moment(task['time_started'], 'YYYY-MM-DD')),
@@ -75,7 +67,7 @@ export function TaskListComponent({
         .utc()
         .hours(hoursDifference)
         .minutes(minutesDifference)
-        .format('HH:mm');
+        .format('H:mm');
 
       return (
         <DataTable.Cell key={shortid.generate()} style={styles.cellWidth}>
@@ -90,11 +82,28 @@ export function TaskListComponent({
           </TouchableWithoutFeedback>
         </DataTable.Cell>
       );
+    } else if (field === 'multi_task') {
+      const yesFontColor = task[field] ? {color: '#7f9f7f'} : null;
+      return (
+        <DataTable.Cell
+          key={shortid.generate()}
+          style={styles.cellWidth}
+          textStyle={yesFontColor}>
+          {task[field] ? 'Yes' : 'No'}
+        </DataTable.Cell>
+      );
     } else {
       const colorForStatus =
         field === 'status' || field === 'priority' ? color[task[field]] : null;
       const styleForTitle =
         field === 'title' ? {width: 150, justifyContent: 'start'} : null;
+
+      const text =
+        field === 'due'
+          ? moment(task['date'], 'DD/MM/YYYY').format('MMM D')
+          : field.includes('started') || field.includes('completed')
+          ? moment(task[field], 'YYYY-MM-DD HH:mm:ss').format('h:mm A')
+          : task[field];
 
       return (
         <DataTable.Cell
@@ -108,13 +117,7 @@ export function TaskListComponent({
             },
             styleForTitle,
           ]}>
-          {field === 'due'
-            ? moment(task['date'], 'DD/MM/YYYY').format('MMM D')
-            : field === 'time_started'
-            ? moment(task['time_started'], 'YYYY-MM-DD HH:mm:ss').format(
-                'h:mm A',
-              )
-            : task[field]}
+          {text}
         </DataTable.Cell>
       );
     }
@@ -139,8 +142,8 @@ export function TaskListComponent({
                   style={[
                     styles.cellWidth,
                     {
-                      width: idx === 0 ? 150 : 100,
-                      justifyContent: idx === 0 ? 'start' : 'center',
+                      width: h === 'Title' ? 150 : 100,
+                      justifyContent: h === 'Title' ? 'start' : 'center',
                     },
                   ]}
                   key={shortid.generate()}>

@@ -1,29 +1,51 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {
   View,
   Text,
   TextInput,
   SafeAreaView,
   ScrollView,
-  Image,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
-import {useSelector} from 'react-redux';
-import {Button, Checkbox} from 'react-native-paper';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import shortid from 'shortid';
+import {useDispatch, useSelector} from 'react-redux';
+import {Button} from 'react-native-paper';
 import styles from './membersStyle';
 import appTheme from '../../constants/colors';
 import {TabScreenHeader} from '../../components';
-import {navigateToNestedRoute} from '../../navigators/RootNavigation';
-import {getScreenParent} from '../../utils/NavigationHelper';
 import {UserListComponent} from '../../components/User';
-import {loadMembers} from '../../store/slices/membersSlice';
+import {searchUser, getUsers} from '../../store/actions/userAction';
 
 export function Members(props) {
-  const members = useSelector(state => state.members);
+  const {me, user, users} = useSelector(state => state.user);
+  const [phoneNumber, setPhoneNumber] = useState();
+  const [isApiCalling, setIsApiCalling] = useState(false);
+  const dispatch = useDispatch();
 
-  const handleNavigation = (screen, params) => {
-    navigateToNestedRoute(getScreenParent(screen), screen, params);
+  useEffect(() => {
+    setIsApiCalling(true);
+    dispatch(getUsers(1))
+      .then(() => setIsApiCalling(false))
+      .catch(() => setIsApiCalling(false));
+  }, [dispatch]);
+
+  const getUser = () => {
+    if (!phoneNumber) {
+      Alert.alert('Please enter phone number!');
+      return;
+    }
+    setIsApiCalling(true);
+
+    dispatch(searchUser(phoneNumber))
+      .then(() => setIsApiCalling(false))
+      .catch(() => setIsApiCalling(false));
+  };
+
+  const handleInvite = () => {
+    if (!user?.email) {
+      Alert.alert('Please select the correct user');
+      return;
+    }
   };
 
   return (
@@ -48,16 +70,18 @@ export function Members(props) {
               <TextInput
                 placeholder="Search"
                 placeholderTextColor={appTheme.INACTIVE_COLOR}
-                inputMode="numeric"
+                keyboardType="numeric"
                 maxLength={10}
+                value={phoneNumber}
+                onChangeText={v => setPhoneNumber(v)}
               />
             </View>
             <Button
               mode="contained"
-              onPress={() => console.log('Pressed')}
+              onPress={() => getUser()}
               style={{width: '39%', marginLeft: 5, justifyContent: 'center'}}
               buttonColor={appTheme.PRIMARY_COLOR}>
-              Find
+              Search
             </Button>
           </View>
           <View
@@ -78,9 +102,10 @@ export function Members(props) {
                 paddingLeft: 10,
               }}>
               <TextInput
-                placeholder="Name"
+                placeholder="First and Last name"
                 placeholderTextColor={appTheme.INACTIVE_COLOR}
                 editable={false}
+                value={user?.name}
               />
             </View>
           </View>
@@ -97,12 +122,13 @@ export function Members(props) {
                 placeholder="Email"
                 placeholderTextColor={appTheme.INACTIVE_COLOR}
                 editable={false}
+                value={user?.email}
               />
             </View>
           </View>
           <Button
             mode="contained"
-            onPress={() => console.log('Pressed')}
+            onPress={() => handleInvite()}
             style={{
               height: 50,
               marginLeft: 5,
@@ -113,9 +139,14 @@ export function Members(props) {
             Send Invite
           </Button>
           <View style={{marginTop: 50}} />
-          <UserListComponent members={members} />
+          <UserListComponent users={users} />
         </View>
       </ScrollView>
+      {isApiCalling && (
+        <View style={styles.activityIndicator}>
+          <ActivityIndicator size="large" color="blue" />
+        </View>
+      )}
     </SafeAreaView>
   );
 }

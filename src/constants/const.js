@@ -18,10 +18,11 @@ export const workingOnHeader = [
   'Title',
   'Due',
   'Priority',
-  'Time Started',
+  'Started',
   'Time Elapsed',
   'Updates',
 ];
+
 export const dashboardHeader = [
   'Title',
   'Updates',
@@ -30,4 +31,33 @@ export const dashboardHeader = [
   'Priority',
   'Assigned by',
   'Recurring',
+];
+
+export const withNoDueDateHeader = [
+  'Title',
+  'Updates',
+  'Status',
+  'Priority',
+  'Assigned by',
+  'Recurring',
+];
+
+export const completedHeader = [
+  'Started',
+  'Completed',
+  'Due',
+  'Title',
+  'Priority',
+  'Time Taken',
+  'Multi Task',
+  'Updates',
+];
+
+export const inCompletedHeader = [
+  'Title',
+  'Due',
+  'Past Due',
+  'Priority',
+  'Reason',
+  'Re assign',
 ];

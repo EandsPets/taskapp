@@ -20,4 +20,5 @@ export default {
   EDIT_COLOR: '#07578a',
   GREEN_COLOR: '#05ce66',
   CALENDAR_BODY_COLOR: '#f1f1f7',
+  LAYER_COLOR: '#969696',
 };

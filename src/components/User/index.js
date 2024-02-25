@@ -7,9 +7,9 @@ import styles from './styles';
 import appTheme from '../../constants/colors';
 
 export function UserListComponent(props) {
-  const {members} = props;
+  const {users} = props;
 
-  const header = ['List', 'Status', 'Photo', 'Type', 'Block Device'];
+  const header = ['Name', 'Status', 'Photo', 'Block Device'];
 
   const renderTableCell = (value, index) => {
     return (
@@ -48,7 +48,7 @@ export function UserListComponent(props) {
               </DataTable.Title>
             ))}
           </DataTable.Header>
-          {members.map(user => (
+          {users.map(user => (
             <DataTable.Row key={shortid.generate()}>
               {Object.entries(user)
                 .filter(([key]) => key !== 'id')
