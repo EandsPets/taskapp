@@ -11,8 +11,18 @@ import {
   getUsersStart,
   getUsersSuccess,
   getUsersFailure,
+  verifyOTPStart,
+  verifyOTPSuccess,
+  verifyOTPFailure,
 } from '../slices/userSlice';
-import {login, register, searchUserApi, getUsersApi} from '../api/api';
+import {
+  login,
+  register,
+  searchUserApi,
+  getUsersApi,
+  verifyOTPApi,
+} from '../api/api';
+import {Alert} from 'react-native';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const loginUser = credentials => async dispatch => {
@@ -78,5 +88,21 @@ export const getUsers = user_id => async dispatch => {
     }
   } catch (error) {
     dispatch(getUsersFailure(error));
+  }
+};
+
+export const verifyOTP = data => async dispatch => {
+  dispatch(verifyOTPStart());
+  try {
+    const response = await verifyOTPApi(data);
+    if (!response.ok) {
+      const errorData = await response.json();
+      dispatch(verifyOTPFailure(errorData.message));
+    } else {
+      const responseData = await response.json();
+      dispatch(verifyOTPSuccess(responseData));
+    }
+  } catch (error) {
+    dispatch(verifyOTPFailure(error));
   }
 };

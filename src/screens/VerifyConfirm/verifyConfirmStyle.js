@@ -1,5 +1,5 @@
 import {StyleSheet, Dimensions} from 'react-native';
-import colors from '../../constants/colors';
+import appTheme from '../../constants/colors';
 import sizes from '../../constants/fontSize';
 const {width, height} = Dimensions.get('window');
 
@@ -7,7 +7,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingBottom: 40,
   },
   backButton: {
     display: 'flex',
@@ -22,27 +21,26 @@ const styles = StyleSheet.create({
     color: 'gray',
   },
   bodyContent: {
-    flex: 1,
     paddingHorizontal: 20,
     paddingTop: 40,
   },
   largeText: {
-    fontFamily: 'Poppins-Medium',
+    fontFamily: 'Poppins-Regular',
     fontSize: sizes.subHeaderFontSize,
     color: 'black',
     lineHeight: 25,
-    marginBottom: 50,
+    marginBottom: 40,
   },
   middleText: {
     fontSize: 18,
-    fontFamily: 'Poppins-Medium',
+    fontFamily: 'Poppins-Regular',
     color: 'black',
+    fontWeight: 'bold',
     marginBottom: 10,
   },
   smallText: {
     fontSize: 15,
-    color: colors.sizes,
-    color: colors.fontSizeR,
+    color: appTheme.INACTIVE_COLOR,
     fontWeight: '500',
     marginBottom: 40,
   },
@@ -67,7 +65,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    fontSize: 15,
     marginBottom: 40,
   },
   savePwdText: {
@@ -80,14 +77,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 50,
+    height: 45,
     borderRadius: 7,
-    marginBottom: 15,
+    marginTop: 25,
   },
   loginBtnText: {fontWeight: 'bold', fontSize: 15, color: '#fff'},
   signUpBtnWrapper: {
-    borderColor: colors.sizes,
-    borderColor: colors.fontSizeR,
+    borderColor: appTheme.INACTIVE_COLOR,
     borderWidth: 1,
     display: 'flex',
     flexDirection: 'row',
@@ -109,6 +105,28 @@ const styles = StyleSheet.create({
   },
   errorBorder: {
     borderColor: 'red',
+  },
+  box: {
+    width: (width - 62) / 7,
+    height: (width - 62) / 7,
+    textAlign: 'center',
+    fontSize: 20,
+    borderRadius: 100,
+    borderWidth: 1,
+    borderColor: appTheme.BORDER_COLOR,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingLeft: 10,
+  },
+  activityIndicator: {
+    position: 'absolute',
+    backgroundColor: 'rgba(0,0,0,0.1)',
+    width: width,
+    height: height,
+    zIndex: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

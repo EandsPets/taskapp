@@ -89,7 +89,7 @@ export function SignUp({navigation}) {
             {marginBottom: 10},
           ]}>
           <TextInput
-            placeholder="Phone number"
+            placeholder="Phone"
             placeholderTextColor="gray"
             style={styles.textInput}
             value={userInfo.phone_number}

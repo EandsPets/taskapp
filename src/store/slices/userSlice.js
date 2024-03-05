@@ -67,6 +67,18 @@ const userSlice = createSlice({
       state.error = action.payload;
       state.users = [];
     },
+    verifyOTPStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    verifyOTPSuccess(state, action) {
+      state.loading = false;
+      state.error = null;
+    },
+    verifyOTPFailure(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -83,6 +95,9 @@ export const {
   getUsersStart,
   getUsersSuccess,
   getUsersFailure,
+  verifyOTPStart,
+  verifyOTPSuccess,
+  verifyOTPFailure,
 } = userSlice.actions;
 
 export default userSlice.reducer;

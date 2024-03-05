@@ -17,6 +17,8 @@ export const getScreenParent = route => {
     'Calendar',
     'Tasks',
     'Project',
+    'VerifyConfirm',
+    'VerifyInput',
   ];
 
   if (DrawerStack.includes(route)) {

@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     paddingTop: 40,
   },
   largeText: {
-    fontFamily: 'Poppins-Regular',
+    fontFamily: 'Poppins-Medium',
     fontSize: sizes.subHeaderFontSize,
     color: 'black',
     lineHeight: 25,
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
   middleText: {
     fontSize: 18,
-    fontFamily: 'Poppins-Regular',
+    fontFamily: 'Poppins-Medium',
     color: 'black',
     fontWeight: 'bold',
     marginBottom: 10,

@@ -78,3 +78,19 @@ export const createNewTaskApi = async data => {
     throw error.response.data.message;
   }
 };
+
+export const verifyOTPApi = async data => {
+  try {
+    const response = await fetch(`${BASE_URL}/user/verify`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    return response;
+  } catch (error) {
+    throw error.response.data.message;
+  }
+};

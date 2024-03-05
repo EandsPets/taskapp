@@ -6,7 +6,16 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import {Dashboard, Projects, Login, SignUp, Profile, Members} from '../screens';
+import {
+  Dashboard,
+  Projects,
+  Login,
+  SignUp,
+  VerifyConfirm,
+  VerifyInput,
+  Profile,
+  Members,
+} from '../screens';
 import appTheme from '../constants/colors';
 import {combineData} from '../utils/DataHelper';
 import {AuthContext} from '../context';
@@ -103,6 +112,11 @@ const SingleStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
+        name="VerifyInput"
+        component={VerifyInput}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
         name="Login"
         component={Login}
         options={{headerShown: false}}
@@ -110,6 +124,11 @@ const SingleStack = () => {
       <Stack.Screen
         name="SignUp"
         component={SignUp}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="VerifyConfirm"
+        component={VerifyConfirm}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
