@@ -23,7 +23,7 @@ import {
   verifyOTPApi,
 } from '../api/api';
 import {Alert} from 'react-native';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const loginUser = credentials => async dispatch => {
   dispatch(loginStart());
@@ -35,7 +35,7 @@ export const loginUser = credentials => async dispatch => {
       dispatch(loginFailure(errMsg));
     } else {
       const userData = await response.json();
-      // await AsyncStorage.setItem('user', JSON.stringify(userData.user));
+      await AsyncStorage.setItem('user', JSON.stringify(userData.user));
       dispatch(loginSuccess(userData.user));
     }
   } catch (error) {

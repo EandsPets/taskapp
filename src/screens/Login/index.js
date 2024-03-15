@@ -21,7 +21,7 @@ export function Login({navigation}) {
     navigation.navigate('BottomStack', {screen: screen});
   };
 
-  const {error} = useSelector(state => state.user);
+  const {me, error} = useSelector(state => state.user);
   const [userInfo, setUserInfo] = useState({
     email: '',
     password: '',
@@ -47,11 +47,9 @@ export function Login({navigation}) {
     const {email, password} = userInfo;
     dispatch(loginUser({email, password}))
       .then(() => {
-        if (!error) {
+        if (me !== null) {
           handleNavigation('My Tasks');
         }
-
-        if (typeof error === 'string') Alert.alert(error);
       })
       .catch(() => {})
       .finally(() => {

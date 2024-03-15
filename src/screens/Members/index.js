@@ -22,13 +22,6 @@ export function Members(props) {
   const [isApiCalling, setIsApiCalling] = useState(false);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    setIsApiCalling(true);
-    dispatch(getUsers(1))
-      .then(() => setIsApiCalling(false))
-      .catch(() => setIsApiCalling(false));
-  }, [dispatch]);
-
   const getUser = () => {
     if (!phoneNumber) {
       Alert.alert('Please enter phone number!');

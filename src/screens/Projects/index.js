@@ -40,16 +40,17 @@ export function Projects(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setIsApiCalling(true);
-    dispatch(getUsers(1)).then(() => {
-      if (users.length > 0) {
-        dispatch(getTasksByUser(users[0].id)).then(() =>
-          setIsApiCalling(false),
-        );
-      } else {
-        setIsApiCalling(false);
-      }
-    });
+    if (users.length > 0) {
+      setIsApiCalling(true);
+      dispatch(getTasksByUser(users[0].id))
+        .then(() => {
+          setIsApiCalling(false);
+        })
+        .catch(() => {})
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
   }, [dispatch]);
 
   const firstCardData = [

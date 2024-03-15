@@ -15,6 +15,7 @@ import {
   VerifyInput,
   Profile,
   Members,
+  BrainStorm,
 } from '../screens';
 import appTheme from '../constants/colors';
 import {combineData} from '../utils/DataHelper';
@@ -52,10 +53,12 @@ function CustomTabBar(props) {
         <TouchableOpacity onPress={() => handleNavigation('Tasks')}>
           <FontAwesome name="list-alt" size={25} color={getColor('Tasks')} />
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.plusBtnContainer}
-          onPress={() => handleNavigation('Create Task')}>
-          <MaterialCommunityIcons name="plus" size={25} color="#fff" />
+        <TouchableOpacity onPress={() => handleNavigation('BrainStorm')}>
+          <MaterialCommunityIcons
+            name="brain"
+            size={30}
+            color={getColor('BrainStorm')}
+          />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleNavigation('Members')}>
           <FontAwesome6
@@ -90,6 +93,11 @@ const BottomStack = () => {
         options={{headerShown: false}}
       />
       <BottomTab.Screen
+        name="BrainStorm"
+        component={BrainStorm}
+        options={{headerShown: false}}
+      />
+      <BottomTab.Screen
         name="Create Task"
         component={CreateTask}
         options={{headerShown: false}}
@@ -112,11 +120,6 @@ const SingleStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="VerifyInput"
-        component={VerifyInput}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
         name="Login"
         component={Login}
         options={{headerShown: false}}
@@ -124,6 +127,11 @@ const SingleStack = () => {
       <Stack.Screen
         name="SignUp"
         component={SignUp}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="VerifyInput"
+        component={VerifyInput}
         options={{headerShown: false}}
       />
       <Stack.Screen
@@ -137,7 +145,7 @@ const SingleStack = () => {
 
 function AppStack() {
   return (
-    <Stack.Navigator initialRouteName="BottomStack">
+    <Stack.Navigator initialRouteName="SingleStack">
       <Stack.Screen
         name="SingleStack"
         component={SingleStack}
@@ -178,7 +186,6 @@ const styles = StyleSheet.create({
     borderTopEndRadius: 30,
   },
   plusBtnContainer: {
-    backgroundColor: appTheme.PRIMARY_COLOR,
     height: 60,
     width: 60,
     borderRadius: 50,

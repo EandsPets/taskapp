@@ -1,4 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
+import {Alert} from 'react-native';
 
 const initialState = {
   me: null,

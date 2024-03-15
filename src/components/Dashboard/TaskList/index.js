@@ -1,14 +1,7 @@
 import React, {useContext} from 'react';
-import {
-  View,
-  ScrollView,
-  Image,
-  TouchableWithoutFeedback,
-  Alert,
-} from 'react-native';
+import {View, ScrollView, Image, TouchableWithoutFeedback} from 'react-native';
 import {Text, DataTable} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
 import shortid from 'shortid';
 import moment from 'moment';
 import styles from './styles';

@@ -10,6 +10,7 @@ export function UserListComponent(props) {
   const {users} = props;
 
   const header = ['Name', 'Status', 'Photo', 'Block Device'];
+  const status = ['Diabled', 'Activated'];
 
   const renderTableCell = (value, index) => {
     return (
@@ -19,7 +20,7 @@ export function UserListComponent(props) {
           styles.cellWidth,
           {
             fontFamily: 'Poppins-Bold',
-            width: index === 0 ? 150 : 100,
+            width: index === 0 ? 200 : 100,
           },
         ]}>
         {index === 2 ? (
@@ -28,6 +29,8 @@ export function UserListComponent(props) {
             style={styles.memberPhoto}
             source={{uri: value[1]}}
           />
+        ) : index === 1 ? (
+          status[value[1]]
         ) : (
           value[1]
         )}
@@ -42,7 +45,7 @@ export function UserListComponent(props) {
           <DataTable.Header>
             {header.map((h, idx) => (
               <DataTable.Title
-                style={[styles.cellWidth, {width: idx === 0 ? 150 : 100}]}
+                style={[styles.cellWidth, {width: idx === 0 ? 200 : 100}]}
                 key={shortid.generate()}>
                 {h}
               </DataTable.Title>
@@ -51,7 +54,7 @@ export function UserListComponent(props) {
           {users.map(user => (
             <DataTable.Row key={shortid.generate()}>
               {Object.entries(user)
-                .filter(([key]) => key !== 'id')
+                .filter(([key]) => key !== 'id' && key !== 'email')
                 .map((value, index) => renderTableCell(value, index))}
               <DataTable.Cell key={shortid.generate()} style={styles.cellWidth}>
                 <TouchableWithoutFeedback

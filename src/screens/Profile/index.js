@@ -6,28 +6,27 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  TextInput,
+  Alert,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import styles from './profileStyle';
 import appTheme from '../../constants/colors';
 import {AuthContext} from '../../context';
 import {TabScreenHeader} from '../../components';
-import {navigateToNestedRoute} from '../../navigators/RootNavigation';
-import {getScreenParent} from '../../utils/NavigationHelper';
+import {UserListComponent} from '../../components/User';
 import {useSelector} from 'react-redux';
 
 export function Profile({navigation}) {
+  const {me, users} = useSelector(state => state.user);
   const {state, dispatch} = useContext(AuthContext);
-  const {user} = useSelector(state => state.user);
 
   const handleBackButton = () => {
     navigation?.goBack();
   };
 
-  const handleNavigation = (screen, params) => {
-    navigateToNestedRoute(getScreenParent(screen), screen, params);
+  const editPhoto = () => {
+    console.log('clicked');
   };
 
   return (
@@ -48,56 +47,80 @@ export function Profile({navigation}) {
         <View>
           <View style={styles.profileDetailsSection}>
             <View style={styles.profileInfoSection}>
-              <View style={styles.statisticsContainer}>
-                <Text style={styles.statisticsText}>135</Text>
-                <Text style={styles.statisticsTitle}>Completed Tasks</Text>
-              </View>
               <Image
                 style={styles.profilePhoto}
                 source={{
-                  uri: user?.photo,
+                  uri: me?.photo,
                 }}
               />
-              <View style={styles.statisticsContainer}>
-                <Text style={styles.statisticsText}>20</Text>
-                <Text style={styles.statisticsTitle}>Ongoing Tasks</Text>
-              </View>
             </View>
             <View style={styles.profileCenterSection}>
-              <Text style={styles.nameText}>{user?.name}</Text>
-              <Text style={styles.designationText}>{user?.designation}</Text>
-              <TouchableOpacity style={styles.editProfileWrapper}>
-                <Text style={styles.editProfileText}>Edit Profile</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.exploreSection}>
-            <Text style={styles.exploreHeader}>Explore</Text>
-            <View style={styles.exploreContent}>
-              <TouchableOpacity style={styles.singleExplore}>
-                <Ionicons name="people" size={22} color={appTheme.COLOR1} />
-                <Text style={styles.exploreText}>Members</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.singleExplore}>
-                <SimpleLineIcons
-                  name="settings"
-                  size={22}
-                  color={appTheme.COLOR1}
-                />
-                <Text style={styles.exploreText}>Settings</Text>
-              </TouchableOpacity>
+              <Text style={styles.nameText}>{me?.name}</Text>
+              <Text style={styles.designationText}>{me?.designation}</Text>
               <TouchableOpacity
-                style={styles.singleExplore}
-                onPress={() => handleNavigation('Onboarding')}>
-                <MaterialCommunityIcons
-                  name="logout"
-                  size={22}
-                  color={appTheme.COLOR1}
-                />
-                <Text style={styles.exploreText}>Log out</Text>
+                style={styles.editProfileWrapper}
+                onPress={editPhoto}>
+                <Text style={styles.editProfileText}>Edit Photo</Text>
               </TouchableOpacity>
             </View>
           </View>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={styles.membersWrapper}>
+              <View style={{marginTop: 10}}>
+                <Text style={{fontSize: 18}}>Name</Text>
+                <View
+                  style={{
+                    borderWidth: 1,
+                    borderRadius: 10,
+                    borderColor: '#e6e6e6',
+                    paddingLeft: 10,
+                  }}>
+                  <TextInput
+                    placeholder="First and Last name"
+                    placeholderTextColor={appTheme.INACTIVE_COLOR}
+                    editable={false}
+                    value={me?.name}
+                  />
+                </View>
+              </View>
+              <View style={{marginTop: 20}}>
+                <Text style={{fontSize: 18}}>Email</Text>
+                <View
+                  style={{
+                    borderWidth: 1,
+                    borderRadius: 10,
+                    borderColor: '#e6e6e6',
+                    paddingLeft: 10,
+                  }}>
+                  <TextInput
+                    placeholder="Email"
+                    placeholderTextColor={appTheme.INACTIVE_COLOR}
+                    editable={false}
+                    value={me?.email}
+                  />
+                </View>
+              </View>
+              <View style={{marginTop: 20}}>
+                <Text style={{fontSize: 18}}>Phone Number</Text>
+                <View
+                  style={{
+                    borderWidth: 1,
+                    borderRadius: 10,
+                    borderColor: '#e6e6e6',
+                    paddingLeft: 10,
+                  }}>
+                  <TextInput
+                    placeholder="Email"
+                    placeholderTextColor={appTheme.INACTIVE_COLOR}
+                    editable={false}
+                    value={me?.email}
+                  />
+                </View>
+              </View>
+              <View style={{marginTop: 50}} />
+              <UserListComponent users={users} />
+            </View>
+          </ScrollView>
         </View>
       </ScrollView>
     </SafeAreaView>

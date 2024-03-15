@@ -26,6 +26,8 @@ import {
   withNoDueDateHeader,
 } from '../../constants/const';
 import {getTasksByUser} from '../../store/actions/taskAction';
+import {getHeaders} from '../../store/actions/headerAction.js';
+import {getUsers} from '../../store/actions/userAction';
 import {
   getWorkingTasks,
   getTasksBeforeToday,
@@ -37,15 +39,29 @@ import {
 } from '../../utils/helper';
 
 export function Dashboard(props) {
+  const {me, users} = useSelector(state => state.user);
+  console.log('--------------', me);
   const tasks = useSelector(state => state.tasks.tasks);
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setIsLoading(true);
-    dispatch(getTasksByUser(1))
-      .then(() => setIsLoading(false))
-      .catch(() => setIsLoading(false));
+    const fetchData = async () => {
+      try {
+        await Promise.all([
+          dispatch(getHeaders(1)),
+          dispatch(getTasksByUser(1)),
+          dispatch(getUsers(1)),
+        ]);
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+        console.error('Error dispatching actions:', error);
+      }
+    };
+
+    fetchData();
   }, [dispatch]);
 
   const handleNavigation = (screen, params) => {

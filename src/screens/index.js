@@ -6,3 +6,4 @@ export * from './Profile';
 export * from './Members';
 export * from './VerifyConfirm';
 export * from './VerifyInput';
+export * from './BrainStorm';

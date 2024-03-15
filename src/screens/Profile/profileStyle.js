@@ -15,9 +15,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  backButton: {
-    marginRight: 10,
-  },
   profileDetailsSection: {
     paddingTop: 40,
     backgroundColor: '#fff',
@@ -43,19 +40,6 @@ const styles = StyleSheet.create({
     width: 80,
     borderRadius: 50,
   },
-  statisticsContainer: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  statisticsText: {
-    color: appTheme.PRIMARY_COLOR,
-    fontSize: 13,
-    fontWeight: 'bold',
-  },
-  statisticsTitle: {
-    fontSize: 13,
-    color: appTheme.INACTIVE_COLOR,
-  },
   profileCenterSection: {
     display: 'flex',
     alignItems: 'center',
@@ -75,43 +59,13 @@ const styles = StyleSheet.create({
   editProfileText: {
     color: '#fff',
   },
-  exploreSection: {
+  membersWrapper: {
     paddingHorizontal: 16,
     paddingTop: 30,
   },
-  exploreHeader: {
-    fontWeight: 'bold',
-    marginBottom: 30,
-    fontSize: 14,
-  },
   exploreContent: {
-    display: 'flex',
-    flexDirection: 'row',
     alignItems: 'center',
-    flexWrap: 'wrap',
     justifyContent: 'space-between',
-  },
-  singleExplore: {
-    height: 80,
-    width: '28%',
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.5,
-    shadowRadius: 1,
-    elevation: 1,
-    backgroundColor: '#fff',
-    margin: 1,
-    marginBottom: 20,
-    borderRadius: 20,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'flex-start',
-  },
-  exploreText: {
-    fontWeight: 'bold',
-    fontSize: 14,
-    color: appTheme.PRIMARY_COLOR,
   },
 });
 

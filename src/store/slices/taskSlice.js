@@ -3,7 +3,7 @@ import {createSlice} from '@reduxjs/toolkit';
 const initialState = {
   tasks: [],
   loading: false,
-  error: null,
+  error: false,
 };
 
 const taskSlice = createSlice({
@@ -12,7 +12,7 @@ const taskSlice = createSlice({
   reducers: {
     getTasksStart(state) {
       state.loading = true;
-      state.error = null;
+      state.error = false;
     },
     getTasksSuccess(state, action) {
       state.loading = false;
@@ -20,11 +20,11 @@ const taskSlice = createSlice({
     },
     getTasksFailure(state, action) {
       state.loading = false;
-      state.error = action.payload;
+      state.error = true;
     },
     createNewTaskStart(state) {
       state.loading = true;
-      state.error = null;
+      state.error = false;
     },
     createNewTaskSuccess(state, action) {
       state.loading = false;
@@ -32,11 +32,11 @@ const taskSlice = createSlice({
     },
     createNewTaskFailure(state, action) {
       state.loading = false;
-      state.error = action.payload;
+      state.error = true;
     },
     updateTaskStart(state) {
       state.loading = true;
-      state.error = null;
+      state.error = false;
     },
     updateTaskSuccess(state, action) {
       state.loading = false;
@@ -44,7 +44,7 @@ const taskSlice = createSlice({
     },
     updateTaskFailure(state, action) {
       state.loading = false;
-      state.error = action.payload;
+      state.error = true;
     },
   },
 });

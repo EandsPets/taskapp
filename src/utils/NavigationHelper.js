@@ -3,7 +3,7 @@ export const getScreenParent = route => {
   let DrawerStack = [
     'Dashboard',
     'Projects',
-    'Create Task',
+    'BrainStorm',
     'Members',
     'Profile',
   ];

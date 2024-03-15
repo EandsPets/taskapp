@@ -94,3 +94,65 @@ export const verifyOTPApi = async data => {
     throw error.response.data.message;
   }
 };
+
+export const getHeadersApi = async user_id => {
+  try {
+    const response = await fetch(`${BASE_URL}/header?user_id=${user_id}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+    return response;
+  } catch (error) {
+    throw error.response.data.message;
+  }
+};
+
+export const createHeaderApi = async (header, user_id) => {
+  try {
+    const response = await fetch(`${BASE_URL}/header`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({title: header, user_id: user_id}),
+    });
+    return response;
+  } catch (error) {
+    throw error.response.data.message;
+  }
+};
+
+export const getBrainStormApi = async header_id => {
+  try {
+    const response = await fetch(`${BASE_URL}/header?header_id=${header_id}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+    return response;
+  } catch (error) {
+    throw error.response.data.message;
+  }
+};
+
+export const updateNoteApi = async (content, header_id) => {
+  try {
+    const response = await fetch(`${BASE_URL}/header/note`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({content: content, header_id: header_id}),
+    });
+    return response;
+  } catch (error) {
+    throw error.response.data.message;
+  }
+};
