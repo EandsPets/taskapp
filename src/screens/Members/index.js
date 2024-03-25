@@ -14,10 +14,10 @@ import styles from './membersStyle';
 import appTheme from '../../constants/colors';
 import {TabScreenHeader} from '../../components';
 import {UserListComponent} from '../../components/User';
-import {searchUser, getUsers} from '../../store/actions/userAction';
+import {searchUser} from '../../store/actions/userAction';
 
 export function Members(props) {
-  const {me, user, users} = useSelector(state => state.user);
+  const {user, users} = useSelector(state => state.user);
   const [phoneNumber, setPhoneNumber] = useState();
   const [isApiCalling, setIsApiCalling] = useState(false);
   const dispatch = useDispatch();

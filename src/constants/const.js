@@ -4,6 +4,14 @@ export const priorities = [
   {key: '3', value: 'Low'},
 ];
 
+export const status = [
+  {key: '1', value: 'Pending'},
+  {key: '2', value: 'In-Progress'},
+  {key: '3', value: 'Hold'},
+  {key: '4', value: 'Stuck'},
+  {key: '5', value: 'Completed'},
+];
+
 export const days = [
   {id: 0, value: 'S'},
   {id: 1, value: 'M'},

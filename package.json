@@ -26,6 +26,7 @@
     "react-native-dropdown-picker": "^5.4.6",
     "react-native-dropdown-select-list": "^2.0.5",
     "react-native-gesture-handler": "^2.14.0",
+    "react-native-image-picker": "^7.1.1",
     "react-native-international-phone-number": "^0.7.6",
     "react-native-paper": "^5.11.4",
     "react-native-popup-menu": "^0.16.1",

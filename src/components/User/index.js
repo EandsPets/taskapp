@@ -5,6 +5,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import shortid from 'shortid';
 import styles from './styles';
 import appTheme from '../../constants/colors';
+import {serverUrl} from '../../utils/helper';
 
 export function UserListComponent(props) {
   const {users} = props;
@@ -15,7 +16,7 @@ export function UserListComponent(props) {
   const renderTableCell = (value, index) => {
     return (
       <DataTable.Cell
-        key={index}
+        key={shortid.generate()}
         style={[
           styles.cellWidth,
           {
@@ -27,7 +28,7 @@ export function UserListComponent(props) {
           <Image
             key={shortid.generate()}
             style={styles.memberPhoto}
-            source={{uri: value[1]}}
+            source={{uri: serverUrl + value[1]}}
           />
         ) : index === 1 ? (
           status[value[1]]

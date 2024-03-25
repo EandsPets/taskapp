@@ -103,3 +103,5 @@ export const getIncompleteTasksBeforeToday = tasks => {
 
   return {tasks: incompleteTasks, count: incompleteTasks.length};
 };
+
+export const serverUrl = 'http://192.168.8.191:8000/storage/';

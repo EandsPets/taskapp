@@ -40,7 +40,9 @@ const taskSlice = createSlice({
     },
     updateTaskSuccess(state, action) {
       state.loading = false;
-      state.tasks = action.payload;
+      state.tasks = tasks.map(task =>
+        task.id === action.payload.id ? action.payload : task,
+      );
     },
     updateTaskFailure(state, action) {
       state.loading = false;

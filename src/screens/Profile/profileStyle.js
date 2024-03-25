@@ -1,5 +1,6 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import appTheme from '../../constants/colors';
+const {width, height} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -30,19 +31,24 @@ const styles = StyleSheet.create({
   },
   profileInfoSection: {
     display: 'flex',
+    width: 150,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 20,
+    alignSelf: 'center',
+    justifyContent: 'center',
   },
   profilePhoto: {
-    height: 80,
-    width: 80,
-    borderRadius: 50,
+    height: 150,
+    width: 150,
+    borderRadius: 80,
+    borderWidth: 1,
+    borderColor: 'red',
   },
   profileCenterSection: {
     display: 'flex',
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   nameText: {fontWeight: 'bold', fontSize: 16, marginBottom: 5},
   designationText: {
@@ -55,6 +61,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     borderRadius: 5,
     paddingVertical: 10,
+    marginTop: 20,
   },
   editProfileText: {
     color: '#fff',
@@ -66,6 +73,16 @@ const styles = StyleSheet.create({
   exploreContent: {
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  activityIndicator: {
+    position: 'absolute',
+    backgroundColor: 'rgba(0,0,0,0.1)',
+    width: width,
+    height: height,
+    zIndex: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

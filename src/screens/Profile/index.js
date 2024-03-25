@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,62 +7,110 @@ import {
   ScrollView,
   Image,
   TextInput,
+  ActivityIndicator,
   Alert,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {useSelector, useDispatch} from 'react-redux';
 import styles from './profileStyle';
 import appTheme from '../../constants/colors';
-import {AuthContext} from '../../context';
 import {TabScreenHeader} from '../../components';
 import {UserListComponent} from '../../components/User';
-import {useSelector} from 'react-redux';
+import {updatePhoto} from '../../store/actions/userAction';
+import {serverUrl} from '../../utils/helper';
 
 export function Profile({navigation}) {
-  const {me, users} = useSelector(state => state.user);
-  const {state, dispatch} = useContext(AuthContext);
+  const {me, users, user} = useSelector(state => state.user);
+  const [photo, setPhoto] = useState(null);
+  const [isPhotoChanged, setIsPhotoChanged] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
-  const handleBackButton = () => {
-    navigation?.goBack();
+  useEffect(() => {
+    if (me) setPhoto({uri: serverUrl + me.photo});
+  }, [me]);
+
+  const createFormData = photo => {
+    const data = new FormData();
+
+    data.append('photo', {
+      uri: Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri,
+      type: photo.type || 'image/jpeg',
+      name: photo.fileName || 'photo.jpg',
+    });
+
+    return data;
   };
 
-  const editPhoto = () => {
-    console.log('clicked');
+  const handleChoosePhoto = () => {
+    const options = {
+      title: 'Select Image',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    launchImageLibrary({mediaType: 'photo'}, response => {
+      if (response.didCancel) {
+        setIsPhotoChanged(false);
+      } else if (response) {
+        setPhoto(response.assets[0]);
+        setIsPhotoChanged(true);
+      }
+    });
+  };
+
+  const handleUploadPhoto = () => {
+    const data = createFormData(photo);
+    if (!isPhotoChanged) return;
+    setIsLoading(true);
+    dispatch(updatePhoto(data))
+      .then(() => {
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const cancelEditPhoto = () => {
+    setIsPhotoChanged(false);
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <TabScreenHeader
-        leftComponent={() => (
-          <View style={styles.leftHeaderWrapper}>
-            <TouchableOpacity
-              onPress={() => handleBackButton('Members')}
-              style={styles.backButton}>
-              <Ionicons name="arrow-back-outline" size={25} color="#000" />
-            </TouchableOpacity>
-            <Text style={styles.headerTitle}>Profile</Text>
-          </View>
-        )}
+        title="Profile"
+        isSearchBtnVisible={true}
+        isMoreBtnVisible={false}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View>
           <View style={styles.profileDetailsSection}>
-            <View style={styles.profileInfoSection}>
+            <TouchableOpacity
+              style={styles.profileInfoSection}
+              onPress={() => handleChoosePhoto()}>
               <Image
                 style={styles.profilePhoto}
                 source={{
-                  uri: me?.photo,
+                  uri: photo?.uri,
                 }}
               />
-            </View>
-            <View style={styles.profileCenterSection}>
-              <Text style={styles.nameText}>{me?.name}</Text>
-              <Text style={styles.designationText}>{me?.designation}</Text>
-              <TouchableOpacity
-                style={styles.editProfileWrapper}
-                onPress={editPhoto}>
-                <Text style={styles.editProfileText}>Edit Photo</Text>
-              </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
+            {isPhotoChanged && (
+              <View style={styles.profileCenterSection}>
+                <TouchableOpacity
+                  style={styles.editProfileWrapper}
+                  onPress={handleUploadPhoto}>
+                  <Text style={styles.editProfileText}>Upload Photo</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.editProfileWrapper, {marginLeft: 20}]}
+                  onPress={cancelEditPhoto}>
+                  <Text style={styles.editProfileText}>Cancel Edit</Text>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.membersWrapper}>
@@ -121,6 +169,11 @@ export function Profile({navigation}) {
               <UserListComponent users={users} />
             </View>
           </ScrollView>
+          {isLoading && (
+            <View style={styles.activityIndicator}>
+              <ActivityIndicator size="large" color="blue" />
+            </View>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>

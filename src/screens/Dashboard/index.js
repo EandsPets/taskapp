@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -6,11 +6,15 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
-  Alert,
+  Modal,
+  TextInput,
+  Pressable,
   Image,
+  Alert,
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import ProgressCircle from 'react-native-progress-circle';
+import {SelectList} from 'react-native-dropdown-select-list';
 import {ProgressBar} from 'react-native-paper';
 import {useSelector, useDispatch} from 'react-redux';
 import moment from 'moment';
@@ -25,7 +29,7 @@ import {
   dashboardHeader,
   withNoDueDateHeader,
 } from '../../constants/const';
-import {getTasksByUser} from '../../store/actions/taskAction';
+import {getTasksByUser, updateTask} from '../../store/actions/taskAction';
 import {getHeaders} from '../../store/actions/headerAction.js';
 import {getUsers} from '../../store/actions/userAction';
 import {
@@ -37,13 +41,15 @@ import {
   getWithNoDueTasks,
   getPercent,
 } from '../../utils/helper';
+import {status} from '../../constants/const.js';
 
 export function Dashboard(props) {
-  const {me, users} = useSelector(state => state.user);
-  console.log('--------------', me);
-  const tasks = useSelector(state => state.tasks.tasks);
   const dispatch = useDispatch();
+  const {me, users} = useSelector(state => state.user);
+  const tasks = useSelector(state => state.tasks.tasks);
   const [isLoading, setIsLoading] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [task, setTask] = useState({});
 
   useEffect(() => {
     setIsLoading(true);
@@ -109,6 +115,41 @@ export function Dashboard(props) {
       color: colors.HIGH_COLOR,
     },
   ];
+
+  const update = (field, val) => {
+    let data = {...task};
+    data[field] = val;
+    setTask(data);
+  };
+
+  const updateStatus = val => {
+    const tempStatus = status.find(s => s.key === val);
+    update('status', tempStatus.value);
+  };
+
+  const handleModalVisibility = (bool, task_id) => {
+    setModalVisible(bool);
+    const task = tasks.filter(t => t.id === task_id);
+    setTask(task[0]);
+  };
+
+  const handleTask = () => {
+    setIsLoading(true);
+    const data = {
+      reason: task.reason,
+      status: task.status,
+    };
+    dispatch(updateTask(task.id, data))
+      .then(() => {
+        if (!error) {
+          Alert.alert('Task updated successfully.');
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -193,6 +234,7 @@ export function Dashboard(props) {
                 headers={workingOnHeader}
                 tasks={getWorkingTasks(tasks)}
                 workingOn={true}
+                handleModalVisibility={handleModalVisibility}
               />
             </View>
             <View style={[styles.listContainer, {marginTop: 10}]}>
@@ -201,6 +243,7 @@ export function Dashboard(props) {
                 headers={dashboardHeader}
                 tasks={getTodayTasks(tasks)}
                 workingOn={false}
+                handleModalVisibility={handleModalVisibility}
               />
               <TouchableOpacity
                 style={styles.createNewTask}
@@ -215,6 +258,7 @@ export function Dashboard(props) {
                 headers={dashboardHeader}
                 tasks={getNextWeekTasks(tasks)}
                 workingOn={false}
+                handleModalVisibility={handleModalVisibility}
               />
               <TouchableOpacity
                 style={styles.createNewTask}
@@ -229,6 +273,7 @@ export function Dashboard(props) {
                 headers={dashboardHeader}
                 tasks={getNextMonthTasks(tasks)}
                 workingOn={false}
+                handleModalVisibility={handleModalVisibility}
               />
               <TouchableOpacity
                 style={styles.createNewTask}
@@ -244,6 +289,7 @@ export function Dashboard(props) {
                 headers={withNoDueDateHeader}
                 tasks={getWithNoDueTasks(tasks)}
                 workingOn={false}
+                handleModalVisibility={handleModalVisibility}
               />
               <TouchableOpacity
                 style={styles.createNewTask}
@@ -253,6 +299,83 @@ export function Dashboard(props) {
               </TouchableOpacity>
             </View>
           </ScrollView>
+          <Modal
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>Update My Task Detail</Text>
+                <View style={styles.textViewContainer}>
+                  <Text style={styles.modalNormalText}>Title:</Text>
+                  <TextInput
+                    style={styles.modalInputText}
+                    onChangeText={e => update('title', e)}
+                    editable={false}
+                    value={task?.title}
+                  />
+                </View>
+                <View style={styles.textViewContainer}>
+                  <Text style={styles.modalNormalText}>Description:</Text>
+                  <TextInput
+                    style={styles.modalInputText}
+                    onChangeText={e => update('description', e)}
+                    editable={false}
+                    value={task?.description}
+                  />
+                </View>
+                <View style={styles.textViewContainer}>
+                  <Text style={styles.modalNormalText}>Description:</Text>
+                  <TextInput
+                    style={styles.modalInputText}
+                    onChangeText={e => update('description', e)}
+                    editable={false}
+                    value={task?.description}
+                  />
+                </View>
+                <View style={styles.textViewContainer}>
+                  <Text style={styles.modalNormalText}>Description:</Text>
+                  <SelectList
+                    defaultOption={status.find(s => s.value === task.status)}
+                    setSelected={val => updateStatus(val)}
+                    data={status}
+                    boxStyles={styles.priorityContainer}
+                  />
+                </View>
+                <View style={styles.textViewContainer}>
+                  <Text style={styles.modalNormalText}>Note:</Text>
+                  <TextInput
+                    style={[styles.modalInputText, {height: 100}]}
+                    textAlignVertical="top"
+                    onChangeText={e => update('reason', e)}
+                    value={task?.reason}
+                    multiline={true}
+                    numberOfLines={5}
+                  />
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                  }}>
+                  <Pressable
+                    style={[styles.button, styles.buttonClose]}
+                    onPress={handleTask}>
+                    <Text style={styles.textStyle}>Update</Text>
+                  </Pressable>
+                  <Pressable
+                    style={[
+                      styles.button,
+                      {backgroundColor: colors.PENDING_COLOR, marginLeft: 20},
+                    ]}
+                    onPress={() => setModalVisible(false)}>
+                    <Text style={styles.textStyle}>Cancel</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </Modal>
           {isLoading && (
             <View style={styles.activityIndicator}>
               <ActivityIndicator size="large" color="blue" />

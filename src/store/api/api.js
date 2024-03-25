@@ -156,3 +156,35 @@ export const updateNoteApi = async (content, header_id) => {
     throw error.response.data.message;
   }
 };
+
+export const updatePhotoApi = async data => {
+  try {
+    const response = await fetch(`${BASE_URL}/user/update-photo`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data',
+      },
+      body: data,
+    });
+    return response;
+  } catch (error) {
+    throw error.response.data.message;
+  }
+};
+
+export const updateTaskApi = async (id, data) => {
+  try {
+    const response = await fetch(`${BASE_URL}/task/${id}`, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    return response;
+  } catch (error) {
+    throw error.response.data.message;
+  }
+};

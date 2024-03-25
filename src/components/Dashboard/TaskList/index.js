@@ -1,12 +1,18 @@
 import React, {useContext} from 'react';
-import {View, ScrollView, Image, TouchableWithoutFeedback} from 'react-native';
+import {
+  View,
+  ScrollView,
+  Image,
+  TouchableWithoutFeedback,
+  Alert,
+} from 'react-native';
 import {Text, DataTable} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import shortid from 'shortid';
 import moment from 'moment';
 import styles from './styles';
-import {AuthContext} from '../../../context';
 import colors from '../../../constants/colors';
+import {serverUrl} from '../../../utils/helper';
 
 export function TaskListComponent({
   title,
@@ -14,9 +20,8 @@ export function TaskListComponent({
   tasks,
   paddingTop,
   workingOn,
+  handleModalVisibility,
 }) {
-  const {state, dispatch} = useContext(AuthContext);
-
   const color = {
     'In-Progress': colors.IN_PROGRESS_COLOR,
     Pending: colors.PENDING_COLOR,
@@ -30,17 +35,17 @@ export function TaskListComponent({
     const field = header.toLowerCase().replace(' ', '_');
     if (field.includes('assigned')) {
       return (
-        <DataTable.Cell key={task.id} style={styles.cellWidth}>
+        <DataTable.Cell key={shortid.generate()} style={styles.cellWidth}>
           <Image
             key={shortid.generate()}
             style={styles.memberPhoto}
-            source={{uri: task[field]?.photo}}
+            source={{uri: serverUrl + task[field]?.photo}}
           />
         </DataTable.Cell>
       );
     } else if (field === 'recurring') {
       return (
-        <DataTable.Cell key={task.id} style={styles.cellWidth}>
+        <DataTable.Cell key={shortid.generate()} style={styles.cellWidth}>
           <Ionicons name="repeat" size={20} color="green" />
         </DataTable.Cell>
       );
@@ -70,7 +75,8 @@ export function TaskListComponent({
     } else if (field === 'updates') {
       return (
         <DataTable.Cell key={shortid.generate()} style={styles.cellWidth}>
-          <TouchableWithoutFeedback>
+          <TouchableWithoutFeedback
+            onPress={() => handleModalVisibility(true, task.id)}>
             <Image source={require('../../../assets/imgs/update.png')} />
           </TouchableWithoutFeedback>
         </DataTable.Cell>
@@ -100,7 +106,7 @@ export function TaskListComponent({
 
       return (
         <DataTable.Cell
-          key={task.id}
+          key={shortid.generate()}
           textStyle={styles.cellText}
           style={[
             styles.cellWidth,

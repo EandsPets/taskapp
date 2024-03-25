@@ -80,6 +80,19 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    updatePhotoStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    updatePhotoSuccess(state, action) {
+      state.loading = false;
+      state.error = null;
+      state.me = action.payload;
+    },
+    updatePhotoFailure(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -99,6 +112,9 @@ export const {
   verifyOTPStart,
   verifyOTPSuccess,
   verifyOTPFailure,
+  updatePhotoStart,
+  updatePhotoSuccess,
+  updatePhotoFailure,
 } = userSlice.actions;
 
 export default userSlice.reducer;

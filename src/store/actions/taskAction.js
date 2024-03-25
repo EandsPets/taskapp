@@ -5,9 +5,12 @@ import {
   createNewTaskStart,
   createNewTaskSuccess,
   createNewTaskFailure,
+  updateTaskStart,
+  updateTaskSuccess,
+  updateTaskFailure,
 } from '../slices/taskSlice';
 import {Alert} from 'react-native';
-import {createNewTaskApi, getTasksApi} from '../api/api';
+import {createNewTaskApi, getTasksApi, updateTaskApi} from '../api/api';
 
 export const getTasksByUser = user_id => async dispatch => {
   dispatch(getTasksStart());
@@ -41,5 +44,22 @@ export const createNewTask = data => async dispatch => {
     }
   } catch (error) {
     dispatch(createNewTaskFailure(error));
+  }
+};
+
+export const updateTask = (id, data) => async dispatch => {
+  dispatch(updateTaskStart());
+  try {
+    const response = await updateTaskApi(id, data);
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errMsg = errorData.error ? errorData.error : errorData.message;
+      dispatch(updateTaskFailure(errMsg));
+    } else {
+      const taskData = await response.json();
+      dispatch(updateTaskSuccess(taskData.task));
+    }
+  } catch (error) {
+    dispatch(updateTaskFailure(error));
   }
 };

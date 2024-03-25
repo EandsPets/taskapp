@@ -26,6 +26,7 @@ import appTheme from '../../../constants/colors';
 import sizes from '../../../constants/fontSize';
 import {createNewTask} from '../../../store/actions/taskAction';
 import {priorities, days} from '../../../constants/const';
+import {serverUrl} from '../../../utils/helper';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -34,7 +35,7 @@ export function CreateTask(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [openCalendar, setOpenCalendar] = useState(false);
   const {error} = useSelector(state => state.tasks);
-  const members = useSelector(state => state.members);
+  const {users} = useSelector(state => state.user);
   const [data, setData] = useState({
     newTask: {
       title: '',
@@ -156,7 +157,7 @@ export function CreateTask(props) {
                 styles.teamWrapper,
                 error && error['assigned_to'] && styles.errorBorder,
               ]}>
-              {members?.map(member => (
+              {users?.map(member => (
                 <View key={shortid.generate()} style={{width: 80}}>
                   <TouchableOpacity
                     style={[
@@ -168,7 +169,7 @@ export function CreateTask(props) {
                     onPress={() => handleSetValue('assigned_to', member.id)}>
                     <Image
                       style={styles.memberPhoto}
-                      source={{uri: member?.photo}}
+                      source={{uri: serverUrl + member?.photo}}
                     />
                   </TouchableOpacity>
                 </View>

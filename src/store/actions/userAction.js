@@ -14,6 +14,9 @@ import {
   verifyOTPStart,
   verifyOTPSuccess,
   verifyOTPFailure,
+  updatePhotoStart,
+  updatePhotoSuccess,
+  updatePhotoFailure,
 } from '../slices/userSlice';
 import {
   login,
@@ -21,6 +24,7 @@ import {
   searchUserApi,
   getUsersApi,
   verifyOTPApi,
+  updatePhotoApi,
 } from '../api/api';
 import {Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -35,7 +39,7 @@ export const loginUser = credentials => async dispatch => {
       dispatch(loginFailure(errMsg));
     } else {
       const userData = await response.json();
-      await AsyncStorage.setItem('user', JSON.stringify(userData.user));
+      await AsyncStorage.setItem('me', JSON.stringify(userData.user));
       dispatch(loginSuccess(userData.user));
     }
   } catch (error) {
@@ -104,5 +108,21 @@ export const verifyOTP = data => async dispatch => {
     }
   } catch (error) {
     dispatch(verifyOTPFailure(error));
+  }
+};
+
+export const updatePhoto = data => async dispatch => {
+  dispatch(updatePhotoStart());
+  try {
+    const response = await updatePhotoApi(data);
+    if (!response.ok) {
+      const errorData = await response.json();
+      dispatch(updatePhotoFailure(errorData.message));
+    } else {
+      const responseData = await response.json();
+      dispatch(updatePhotoSuccess(responseData));
+    }
+  } catch (error) {
+    dispatch(updatePhotoFailure(error));
   }
 };
