@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
   },
   bodyContent: {
     flex: 1,
-    paddingHorizontal: 20,
     paddingTop: 40,
   },
   largeText: {

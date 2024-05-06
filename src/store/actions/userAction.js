@@ -26,21 +26,19 @@ import {
   verifyOTPApi,
   updatePhotoApi,
 } from '../api/api';
-import {Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const loginUser = credentials => async dispatch => {
   dispatch(loginStart());
   try {
     const response = await login(credentials);
+    const data = await response.json();
     if (!response.ok) {
-      const errorData = await response.json();
-      const errMsg = errorData.error ? errorData.error : errorData.message;
+      const errMsg = data.error ? data.error : data.message;
       dispatch(loginFailure(errMsg));
     } else {
-      const userData = await response.json();
-      await AsyncStorage.setItem('me', JSON.stringify(userData.user));
-      dispatch(loginSuccess(userData.user));
+      await AsyncStorage.setItem('me', JSON.stringify(data.user));
+      dispatch(loginSuccess(data.user));
     }
   } catch (error) {
     dispatch(loginFailure(error));
@@ -51,12 +49,11 @@ export const registerUser = userData => async dispatch => {
   dispatch(registerStart());
   try {
     const response = await register(userData);
+    const data = await response.json();
     if (!response.ok) {
-      const errorData = await response.json();
-      dispatch(registerFailure(errorData.error));
+      dispatch(registerFailure(data.error));
     } else {
-      const userData = await response.json();
-      dispatch(registerSuccess(userData.user));
+      dispatch(registerSuccess(data.data));
     }
   } catch (error) {
     dispatch(registerFailure(error));
@@ -67,12 +64,11 @@ export const searchUser = phone_number => async dispatch => {
   dispatch(searchUserStart());
   try {
     const response = await searchUserApi(phone_number);
+    const data = await response.json();
     if (!response.ok) {
-      const errorData = await response.json();
-      dispatch(searchUserFailure(errorData.message));
+      dispatch(searchUserFailure(data.message));
     } else {
-      const responseData = await response.json();
-      dispatch(searchUserSuccess(responseData.user));
+      dispatch(searchUserSuccess(data.user));
     }
   } catch (error) {
     dispatch(searchUserFailure(error));
@@ -83,12 +79,11 @@ export const getUsers = user_id => async dispatch => {
   dispatch(getUsersStart());
   try {
     const response = await getUsersApi(user_id);
+    const data = await response.json();
     if (!response.ok) {
-      const errorData = await response.json();
-      dispatch(getUsersFailure(errorData.message));
+      dispatch(getUsersFailure(data.message));
     } else {
-      const responseData = await response.json();
-      dispatch(getUsersSuccess(responseData.users));
+      dispatch(getUsersSuccess(data.users));
     }
   } catch (error) {
     dispatch(getUsersFailure(error));
@@ -99,12 +94,11 @@ export const verifyOTP = data => async dispatch => {
   dispatch(verifyOTPStart());
   try {
     const response = await verifyOTPApi(data);
+    const data = await response.json();
     if (!response.ok) {
-      const errorData = await response.json();
-      dispatch(verifyOTPFailure(errorData.message));
+      dispatch(verifyOTPFailure(data.message));
     } else {
-      const responseData = await response.json();
-      dispatch(verifyOTPSuccess(responseData));
+      dispatch(verifyOTPSuccess(data));
     }
   } catch (error) {
     dispatch(verifyOTPFailure(error));
@@ -115,12 +109,11 @@ export const updatePhoto = data => async dispatch => {
   dispatch(updatePhotoStart());
   try {
     const response = await updatePhotoApi(data);
+    const data = await response.json();
     if (!response.ok) {
-      const errorData = await response.json();
-      dispatch(updatePhotoFailure(errorData.message));
+      dispatch(updatePhotoFailure(data.message));
     } else {
-      const responseData = await response.json();
-      dispatch(updatePhotoSuccess(responseData));
+      dispatch(updatePhotoSuccess(data));
     }
   } catch (error) {
     dispatch(updatePhotoFailure(error));
