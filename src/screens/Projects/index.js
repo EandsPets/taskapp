@@ -7,6 +7,7 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import shortid from 'shortid';
 import ProgressCircle from 'react-native-progress-circle';
@@ -48,10 +49,26 @@ export function Projects(props) {
         })
         .catch(() => {})
         .finally(() => {
-          setIsLoading(false);
+          setIsApiCalling(false);
         });
     }
   }, [dispatch]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (selectedUser) {
+        setIsApiCalling(true);
+        dispatch(getTasksByUser(selectedUser.id))
+          .then(() => {
+            setIsApiCalling(false);
+          })
+          .catch(() => {})
+          .finally(() => {
+            setIsApiCalling(false);
+          });
+      }
+    }, [dispatch, selectedUser]),
+  );
 
   const firstCardData = [
     {
@@ -106,7 +123,7 @@ export function Projects(props) {
     <SafeAreaView style={styles.container}>
       <TabScreenHeader
         title="Reports"
-        isSearchBtnVisible={true}
+        isSearchBtnVisible={false}
         isMoreBtnVisible={false}
       />
       <View style={styles.contentBody}>

@@ -188,3 +188,19 @@ export const updateTaskApi = async (id, data) => {
     throw error.response.data.message;
   }
 };
+
+export const invitationApi = async data => {
+  try {
+    const response = await fetch(`${BASE_URL}/invitation/send`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    return response;
+  } catch (error) {
+    throw error.response.data.message;
+  }
+};

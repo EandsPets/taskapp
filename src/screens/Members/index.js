@@ -14,10 +14,10 @@ import styles from './membersStyle';
 import appTheme from '../../constants/colors';
 import {TabScreenHeader} from '../../components';
 import {UserListComponent} from '../../components/User';
-import {searchUser} from '../../store/actions/userAction';
+import {searchUser, sendInvitation} from '../../store/actions/userAction';
 
 export function Members(props) {
-  const {user, users} = useSelector(state => state.user);
+  const {me, user, users} = useSelector(state => state.user);
   const [phoneNumber, setPhoneNumber] = useState();
   const [isApiCalling, setIsApiCalling] = useState(false);
   const dispatch = useDispatch();
@@ -39,13 +39,24 @@ export function Members(props) {
       Alert.alert('Please select the correct user');
       return;
     }
+    setIsApiCalling(true);
+    dispatch(sendInvitation({sender_id: me.id, recipient_email: user.email}))
+      .then(() => {
+        if (!error) {
+          Alert.alert('Invitation sent successfully.');
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        setIsApiCalling(false);
+      });
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <TabScreenHeader
         title="Users"
-        isSearchBtnVisible={true}
+        isSearchBtnVisible={false}
         isMoreBtnVisible={false}
       />
       <ScrollView showsVerticalScrollIndicator={false}>

@@ -35,12 +35,12 @@ export function CreateTask(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [openCalendar, setOpenCalendar] = useState(false);
   const {error} = useSelector(state => state.tasks);
-  const {users} = useSelector(state => state.user);
+  const {me, users} = useSelector(state => state.user);
   const [data, setData] = useState({
     newTask: {
       title: '',
       description: '',
-      assigned_by: '1',
+      assigned_by: me.id,
       repeat_days: [],
       start_time: new Date(),
       finish_time: new Date(),
@@ -75,17 +75,18 @@ export function CreateTask(props) {
   const assign = () => {
     setIsLoading(true);
     const {newTask} = data;
+    const formattedDate = moment(selected).format('YYYY-MM-DD');
+    const startTime = moment(newTask.start_time).format('HH:mm:ss');
+    const finishTime = moment(newTask.finish_time).format('HH:mm:ss');
+
     const taskData = {
       ...newTask,
-      start_time: moment(newTask.start_time).format('YYYY-MM-DD HH:mm:ss'),
-      finish_time: moment(newTask.finish_time).format('YYYY-MM-DD HH:mm:ss'),
+      start_time: `${formattedDate} ${startTime}`,
+      finish_time: `${formattedDate} ${finishTime}`,
     };
+
     dispatch(createNewTask(taskData))
-      .then(() => {
-        if (!error) {
-          Alert.alert('Task created successfully.');
-        }
-      })
+      .then(() => {})
       .catch(() => {})
       .finally(() => {
         setIsLoading(false);
@@ -111,7 +112,7 @@ export function CreateTask(props) {
     <View style={styles.container}>
       <TabScreenHeader
         title="Create a task"
-        isSearchBtnVisible={true}
+        isSearchBtnVisible={false}
         isMoreBtnVisible={false}
       />
       <ScrollView style={{paddingHorizontal: 16}}>
@@ -171,6 +172,7 @@ export function CreateTask(props) {
                       style={styles.memberPhoto}
                       source={{uri: serverUrl + member?.photo}}
                     />
+                    <Text>{member.name}</Text>
                   </TouchableOpacity>
                 </View>
               ))}

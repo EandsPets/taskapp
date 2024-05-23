@@ -13,6 +13,7 @@ const taskSlice = createSlice({
     getTasksStart(state) {
       state.loading = true;
       state.error = false;
+      state.tasks = [];
     },
     getTasksSuccess(state, action) {
       state.loading = false;
@@ -32,7 +33,7 @@ const taskSlice = createSlice({
     },
     createNewTaskFailure(state, action) {
       state.loading = false;
-      state.error = true;
+      state.error = action.payload;
     },
     updateTaskStart(state) {
       state.loading = true;

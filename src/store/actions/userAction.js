@@ -17,6 +17,9 @@ import {
   updatePhotoStart,
   updatePhotoSuccess,
   updatePhotoFailure,
+  invitationStart,
+  invitationSuccess,
+  invitationFailure,
 } from '../slices/userSlice';
 import {
   login,
@@ -25,6 +28,7 @@ import {
   getUsersApi,
   verifyOTPApi,
   updatePhotoApi,
+  invitationApi,
 } from '../api/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -109,13 +113,28 @@ export const updatePhoto = data => async dispatch => {
   dispatch(updatePhotoStart());
   try {
     const response = await updatePhotoApi(data);
-    const data = await response.json();
+    const resData = await response.json();
     if (!response.ok) {
-      dispatch(updatePhotoFailure(data.message));
+      dispatch(updatePhotoFailure(resData.message));
     } else {
-      dispatch(updatePhotoSuccess(data));
+      dispatch(updatePhotoSuccess(resData));
     }
   } catch (error) {
     dispatch(updatePhotoFailure(error));
+  }
+};
+
+export const sendInvitation = data => async dispatch => {
+  dispatch(invitationStart());
+  try {
+    const response = await invitationApi(data);
+    const resData = await response.json();
+    if (!response.ok) {
+      dispatch(invitationFailure(resData.message));
+    } else {
+      dispatch(invitationSuccess(resData));
+    }
+  } catch (error) {
+    dispatch(invitationFailure(error));
   }
 };

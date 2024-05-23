@@ -24,7 +24,7 @@ export function TabScreenHeader({title, isSearchBtnVisible, isMoreBtnVisible}) {
 
   return (
     <View style={styles.headerContainer}>
-      <Entypo name="menu" size={25} color={appTheme.INACTIVE_COLOR} />
+      <Entypo name="menu" size={0} color={appTheme.BRAIN_STORM_BOARD_BG} />
       <Text style={styles.headerText}>{title}</Text>
       <View style={styles.headerRightContainer}>
         {isSearchBtnVisible ? (

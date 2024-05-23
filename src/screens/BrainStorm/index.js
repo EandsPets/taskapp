@@ -31,6 +31,7 @@ import {createHeader, updateNote} from '../../store/actions/headerAction.js';
 
 export function BrainStorm(props) {
   const dispatch = useDispatch();
+  const {me} = useSelector(state => state.user);
   const tasks = useSelector(state => state.tasks.tasks);
   const headers = useSelector(state => state.headers.headers);
   const [isLoading, setIsLoading] = useState(false);
@@ -70,7 +71,7 @@ export function BrainStorm(props) {
       setError(true);
       return;
     }
-    dispatch(createHeader(headerTitle, 1))
+    dispatch(createHeader(headerTitle, me.id))
       .then(() => {
         setIsLoading(false);
         setModalVisible(false);
@@ -92,7 +93,7 @@ export function BrainStorm(props) {
     <SafeAreaView style={styles.container}>
       <TabScreenHeader
         title="Brain Storm Board"
-        isSearchBtnVisible={true}
+        isSearchBtnVisible={false}
         isMoreBtnVisible={false}
       />
       <ScrollView>

@@ -34,13 +34,13 @@ export const createNewTask = data => async dispatch => {
   dispatch(createNewTaskStart());
   try {
     const response = await createNewTaskApi(data);
+    const resData = await response.json();
     if (!response.ok) {
-      const errorData = await response.json();
-      const errMsg = errorData.error ? errorData.error : errorData.message;
-      dispatch(createNewTaskFailure(errMsg));
+      dispatch(
+        createNewTaskFailure(resData.error ? resData.error : resData.message),
+      );
     } else {
-      const taskData = await response.json();
-      dispatch(createNewTaskSuccess(taskData.task));
+      dispatch(createNewTaskSuccess(resData.task));
     }
   } catch (error) {
     dispatch(createNewTaskFailure(error));

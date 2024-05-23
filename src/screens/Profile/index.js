@@ -8,7 +8,6 @@ import {
   Image,
   TextInput,
   ActivityIndicator,
-  Alert,
 } from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {useSelector, useDispatch} from 'react-redux';
@@ -20,7 +19,7 @@ import {updatePhoto} from '../../store/actions/userAction';
 import {serverUrl} from '../../utils/helper';
 
 export function Profile({navigation}) {
-  const {me, users, user} = useSelector(state => state.user);
+  const {me, users} = useSelector(state => state.user);
   const [photo, setPhoto] = useState(null);
   const [isPhotoChanged, setIsPhotoChanged] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -62,6 +61,7 @@ export function Profile({navigation}) {
 
   const handleUploadPhoto = () => {
     const data = createFormData(photo);
+    data.append('user_id', me.id);
     if (!isPhotoChanged) return;
     setIsLoading(true);
     dispatch(updatePhoto(data))
@@ -81,7 +81,7 @@ export function Profile({navigation}) {
     <SafeAreaView style={styles.container}>
       <TabScreenHeader
         title="Profile"
-        isSearchBtnVisible={true}
+        isSearchBtnVisible={false}
         isMoreBtnVisible={false}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -158,10 +158,10 @@ export function Profile({navigation}) {
                     paddingLeft: 10,
                   }}>
                   <TextInput
-                    placeholder="Email"
+                    placeholder="Phone number"
                     placeholderTextColor={appTheme.INACTIVE_COLOR}
                     editable={false}
-                    value={me?.email}
+                    value={me?.phone_number}
                   />
                 </View>
               </View>

@@ -1,13 +1,14 @@
 import React, {useState, useContext, useEffect} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+// import {useDispatch, useSelector} from 'react-redux';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import {
   Dashboard,
   Projects,
@@ -147,29 +148,28 @@ const SingleStack = () => {
 };
 
 function AppStack() {
-  const dispatch = useDispatch();
-  const [userLoaded, setUserLoaded] = useState(false);
-  const {me} = useSelector(state => state.user);
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const meValue = await AsyncStorage.getItem('me');
-        if (meValue) {
-          dispatch(loginSuccess(JSON.parse(meValue)));
-          setUserLoaded(true);
-        }
-      } catch (error) {
-        console.error('Error fetching user from AsyncStorage:', error);
-        setUserLoaded(false);
-      }
-    };
+  // const dispatch = useDispatch();
+  // const [userLoaded, setUserLoaded] = useState(false);
+  // const {me} = useSelector(state => state.user);
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const meValue = await AsyncStorage.getItem('me');
+  //       if (meValue) {
+  //         dispatch(loginSuccess(JSON.parse(meValue)));
+  //         setUserLoaded(true);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching user from AsyncStorage:', error);
+  //       setUserLoaded(false);
+  //     }
+  //   };
 
-    fetchUser();
-  }, [dispatch]);
+  //   fetchUser();
+  // }, [dispatch]);
 
   return (
-    <Stack.Navigator
-      initialRouteName={userLoaded ? 'BottomStack' : 'SingleStack'}>
+    <Stack.Navigator initialRouteName="SingleStack">
       <Stack.Screen
         name="SingleStack"
         component={SingleStack}

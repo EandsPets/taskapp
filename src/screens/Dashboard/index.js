@@ -12,6 +12,7 @@ import {
   Image,
   Alert,
 } from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import ProgressCircle from 'react-native-progress-circle';
 import {SelectList} from 'react-native-dropdown-select-list';
@@ -51,24 +52,31 @@ export function Dashboard(props) {
   const [modalVisible, setModalVisible] = useState(false);
   const [task, setTask] = useState({});
 
-  useEffect(() => {
+  const fetchData = async () => {
     setIsLoading(true);
-    const fetchData = async () => {
-      try {
-        await Promise.all([
-          dispatch(getHeaders(1)),
-          dispatch(getTasksByUser(1)),
-          dispatch(getUsers(1)),
-        ]);
-        setIsLoading(false);
-      } catch (error) {
-        setIsLoading(false);
-        console.error('Error dispatching actions:', error);
-      }
-    };
+    try {
+      await Promise.all([
+        dispatch(getHeaders(me.id)),
+        dispatch(getTasksByUser(me.id)),
+        dispatch(getUsers(me.id)),
+      ]);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.error('Error dispatching actions:', error);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, [dispatch]);
+
+  // Use useFocusEffect to refetch tasks when the Dashboard screen gains focus
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchData();
+    }, []),
+  );
 
   const handleNavigation = (screen, params) => {
     props?.navigation.navigate('BottomStack', {screen: screen});
@@ -155,7 +163,7 @@ export function Dashboard(props) {
     <SafeAreaView style={styles.container}>
       <TabScreenHeader
         title="Dashboard"
-        isSearchBtnVisible={true}
+        isSearchBtnVisible={false}
         isMoreBtnVisible={false}
       />
       <View style={styles.contentBody}>

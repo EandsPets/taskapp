@@ -93,6 +93,19 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    invitationStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    invitationSuccess(state, action) {
+      state.loading = false;
+      state.error = null;
+      state.users = [...state.users, action.payload];
+    },
+    invitationFailure(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -115,6 +128,9 @@ export const {
   updatePhotoStart,
   updatePhotoSuccess,
   updatePhotoFailure,
+  invitationStart,
+  invitationSuccess,
+  invitationFailure,
 } = userSlice.actions;
 
 export default userSlice.reducer;
